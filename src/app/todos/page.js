@@ -36,7 +36,28 @@ export default function ToDos() {
     }
 
     function removeTodo({ index }) {
-        setTodos(todos.filter((v,idx) => idx!==index));
+        const todosremove = todos[index]
+        fetch(`/api/todos/${todosremove.id}`, { method : "delete" }).then((response) => {
+            if (response.ok){
+                setTodos(todos.filter((v,idx) => idx!==index));
+            }
+            else{
+                console.error("Failed to delete the item from the database!")
+            }
+        })
+    }
+    
+    function checks({index}){
+        const toUpdate = todos[index]
+        fetch(`/api/todos/${toUpdate.id}`, { method : "put", body: JSON.stringify({value: toUpdate.value, done: !toUpdate.done})}).then((response) => {
+            if (response.ok) {
+                setTodos(todos.map((value) => {
+                    return value.id === toUpdate.id ? {...toUpdate, done: !toUpdate.done}: value}))
+            }
+            else{
+                console.error("Failed to mark the item in database.")
+            }
+        })
     }
 
     useEffect(() => {
@@ -56,7 +77,7 @@ export default function ToDos() {
         }>  
             <ListItemButton>
                 <ListItemIcon>
-                    <Checkbox checked={todo.done} disableRipple/>
+                    <Checkbox checked={todo.done}  onClick={() => checks({index: idx})}/>
                 </ListItemIcon>
                 <ListItemText primary={todo.value}/>
             </ListItemButton>
