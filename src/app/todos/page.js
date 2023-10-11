@@ -24,19 +24,39 @@ export default function ToDos() {
     }
 
     function addNewTodo() {
-        if(newTodo && newTodo.length) {
+        if(newTodo && newTodo.length) {                 //the boxes
             fetch("api/todos", { method: "post", body: JSON.stringify({value: newTodo, done: false}) } ).then((response) => {
                 return response.json().then((newTodo) => {
                     setTodos([...todos, newTodo]);
                     setNewTodo('');
                 });
             });
-            
         }
     }
 
     function removeTodo({ index }) {
-        setTodos(todos.filter((v,idx) => idx!==index));
+
+        const todoToRemove = todos[index];
+        fetch(`/api/todos/${toUpdate.id}`,{method : "delete"}).then((response) => {
+            if(response.ok){
+                setTodos(todos.filter((v,idx) => idx!==index));
+            } else{
+                console.error("didn't remove item from the database");
+            }
+        })
+    }
+
+    function checks({index}){
+        const toUpdate = todos[index]
+        fetch(`/api/todos/${toUpdate.id}`, { method : "put", body: JSON.stringify({value: toUpdate.value, done: !toUpdate.done})}).then((response) => {
+            if (response.ok) {
+                setTodos(todos.map((value) => {
+                    return value.id === toUpdate.id ? {...toUpdate, done: !toUpdate.done}: value}))
+            }
+            else{
+                console.error("failed to check the box in database")
+            }
+        })
     }
 
     useEffect(() => {
@@ -56,7 +76,7 @@ export default function ToDos() {
         }>  
             <ListItemButton>
                 <ListItemIcon>
-                    <Checkbox checked={todo.done} disableRipple/>
+                    <Checkbox checked={todo.done} onClick = {() => checks({index: idx})}/>
                 </ListItemIcon>
                 <ListItemText primary={todo.value}/>
             </ListItemButton>
