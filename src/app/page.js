@@ -144,21 +144,21 @@ export default function ToDos() {
     return (
         <>
             <h2><center>Explore</center></h2>
-            <Box sx = {{ flexgrow: 1}}>
-              <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 , sm: 2 , md: 0}}>
+            <center><Box sx = {{flexgrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <Grid container justifyContent = "center" alignItems = "center" rowSpacing = {1} >
                 {slider}
-                {!isLoading && <ListItem key="leftArrow" secondaryAction={<IconButton sx={{mr: 216, mb: 40}} onClick={sliderDec}><ArrowBackIosIcon sx={{color: 'black'}} /></IconButton>}></ListItem> }
-                {!isLoading && <ListItem key="rightrrow" secondaryAction={<IconButton sx={{mr: 0, mb: 40}} onClick={sliderInc}><ArrowForwardIosIcon sx={{color: 'black'}} /></IconButton>}>
-                  </ListItem>}
+                {!isLoading && <ListItem key="leftArrow" secondaryAction={<IconButton sx={{mr: 213, mb: 45}} onClick={sliderDec}><ArrowBackIosIcon sx={{color: 'black'}} /></IconButton>}></ListItem> }
+                {!isLoading && <ListItem key="rightrrow" secondaryAction={<IconButton sx={{mr: -3.3, mb: 45}} onClick={sliderInc}><ArrowForwardIosIcon sx={{color: 'black'}} /></IconButton>}>
+                  </ListItem>}  
               </Grid>
-            </Box>
+            </Box></center>
 
             
-            <Box sx = {{ flexgrow: 1}}>
+            <center><Box sx = {{ flexgrow: 1}}>
               <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 , sm: 2 , md: 0}}>
                 {toDoItems}
               </Grid>
-            </Box>
+            </Box></center>
 
             {/* <List sx={{ width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
                 { toDoItems }
