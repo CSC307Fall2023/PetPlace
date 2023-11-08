@@ -143,6 +143,7 @@ export default function ToDos() {
       
     return (
         <>
+         <li> link: <a href="/demo_profile"> demo profile page</a>   </li>
             <h2><center>Explore</center></h2>
             <center><Box sx = {{flexgrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
               <Grid container justifyContent = "center" alignItems = "center" rowSpacing = {1} >
