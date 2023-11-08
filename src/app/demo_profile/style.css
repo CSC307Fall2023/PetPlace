@@ -53,14 +53,17 @@ body {
   font-weight: bold;
 }
 
+.photo-gallery {
+  display: flex;
+      justify-content: center;
+}
 .photo-gallery img {
-  margin: 5px;
+  margin: 0px; /* Try removing this line */
   border-radius: 5px;
-  margin: 120px; /* Adjust the margin as needed */
+  max-width: 500px;
+  max-height: 500px; /* Try removing or adjusting this line */
+  scale: 1;
 
-  max-width: 500px; /* Adjust the maximum width for larger images */
-  max-height: 500px;
-  scale: 3;
 }
 
 
