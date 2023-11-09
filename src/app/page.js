@@ -18,6 +18,7 @@ import { Button } from '@mui/material';
 import { Icon } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { FaceRetouchingNatural } from '@mui/icons-material';
 
 
 
@@ -35,6 +36,7 @@ export default function ToDos() {
     const [isLoading, setIsLoading] = useState(true);
     const [newTodo, setNewTodo] = useState('');
     const [todosList, setTodosList] = useState([]);
+    const [galleries, setGalleries] = useState([])
 
     function inputChangeHandler(e) {
         setNewTodo(e.target.value);
@@ -140,7 +142,14 @@ export default function ToDos() {
       }
     }
 
-      
+    useEffect(() => {
+        fetch("/api/profile/galleryhome", { method: "get" })
+          .then((response) => response.ok && response.json())
+          .then((petphoto) => {
+            setGalleries(petphoto);
+          });
+      }, [])
+
     return (
         <>
          {/* <li> link: <a href="/demo_profile"> demo profile page</a>   </li> */}
