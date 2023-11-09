@@ -32,73 +32,27 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ToDos() {
 
-    const [todos, setTodos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [newTodo, setNewTodo] = useState('');
-    const [todosList, setTodosList] = useState([]);
-    const [galleries, setGalleries] = useState([])
-
-    function inputChangeHandler(e) {
-        setNewTodo(e.target.value);
-    }
-
-    function addNewTodo({index}) {
-        if(newTodo && newTodo.length) {
-            fetch("api/todos", { method: "post", body: JSON.stringify({value: newTodo, done: false}) } ).then((response) => {
-                return response.json().then((newTodo) => {
-                    setTodos([...todos, newTodo]);
-                    setNewTodo('');
-                });
-            });
-            
-        }
-    }
-
-    function removeTodo({ index }) {
-        var remv = todos[index];
-        fetch(`api/todos/${remv.id}`, { method: "delete"}).then();
-        setTodos(todos.filter((v,idx) => idx!==index));
-    }
-
-    function makeCheck ({index}) {
-        var tar = todos[index];
-        fetch(`api/todos/${tar.id}`, { method: "put", body: JSON.stringify({value: tar.value, done: !tar.done})}).then((response) => {
-        setTodos(todos.map((value) => {
-            if (value.id === tar.id) {
-                return {...tar, done: !tar.done};
-            }
-            else {
-                return value;
-            }
-                } ))
-            });
-    }
+    const [galleries, setGalleries] = useState([]);
 
     useEffect(() => {
-        fetch("/api/todos", { method: "get" }).then((response) => response.ok && response.json()).then(
-            todos => {
-                todos && setTodos(todos);
-                setIsLoading(false);
-            }
-        );
-    }, []);
+        fetch("/api/profile/galleryhome", { method: "get" })
+          .then((response) => response.ok && response.json())
+          .then(galleries => {
+            galleries && setGalleries(galleries);
+            setIsLoading(false);
+          });
+      }, [])
 
     const loadingItems = <CircularProgress/>;
 
-    const toDoItems = isLoading ? loadingItems : todos.map((todo, idx) => {
+    const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
         return <Grid item xs = {2.4}>  
-        <Box key={idx} secondaryAction={
-            <Button edge="end" onClick={() => removeTodo({index: idx})}><DeleteForever/></Button>   
-        }>  
         <Box sx = {{width: 300, height: 300, border: 5}}>
             <Button sx ={{width: 300, height: 300}} >
-                <Icon>
-                    <Checkbox checked={todo.done} disableRipple onChange={() => makeCheck({index: idx})}/>
-                </Icon>
-                <TextField primary={todo.value}/>
+                <Image src = {photo.imageUrl} width = {200} height = {200}/>
             </Button>
             </Box> 
-        </Box>
         </Grid>
     })
 
@@ -142,13 +96,7 @@ export default function ToDos() {
       }
     }
 
-    useEffect(() => {
-        fetch("/api/profile/galleryhome", { method: "get" })
-          .then((response) => response.ok && response.json())
-          .then((petphoto) => {
-            setGalleries(petphoto);
-          });
-      }, [])
+
 
     return (
         <>
