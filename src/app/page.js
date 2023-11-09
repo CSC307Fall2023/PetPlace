@@ -38,20 +38,22 @@ export default function ToDos() {
     useEffect(() => {
         fetch("/api/profile/galleryhome", { method: "get" })
           .then((response) => response.ok && response.json())
-          .then(galleries => {
-            galleries && setGalleries(galleries);
+          .then((petphoto) => {
+            setGalleries(petphoto);
             setIsLoading(false);
           });
       }, [])
 
     const loadingItems = <CircularProgress/>;
-
+    
+    console.log(galleries)
     const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
         return <Grid item xs = {2.4}>  
         <Box sx = {{width: 300, height: 300, border: 5}}>
-            <Button sx ={{width: 300, height: 300}} >
-                <Image src = {photo.imageUrl} width = {200} height = {200}/>
-            </Button>
+        <img src = {photo.imageUrl} width = {200} height = {200}/>
+            {/* <Button sx ={{width: 300, height: 300}} >
+                <img src = {photo.imageUrl} alt = "photos" width = {200} height = {200}/>
+            </Button> */}
             </Box> 
         </Grid>
     })
