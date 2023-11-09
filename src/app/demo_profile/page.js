@@ -1,10 +1,16 @@
 'use client'
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import './style.css';
+
+
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [gallery, setGallery] = useState([]);
+  const [editedGallery, setEditedGallery] = useState([]);
+
+  //const [showUploadedImages, setShowUploadedImages] = useState(false);
 
   const petInfo = {
     name: '...',
@@ -19,10 +25,11 @@ export default function Profile() {
   };
 
   const userInfo = {
+    profileImage: "/goated.jpg",
     name: "Your Name",
-    username: "Your username",
-    profileImage: "/goated.jpg"
+    username: "Your username"
   }
+
 
   const [editedPetInfo, setEditedPetInfo] = useState({ ...petInfo });
 
@@ -30,13 +37,13 @@ export default function Profile() {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  async function handleSaveClick () {
     // Save the edited pet info to the server
     // You can send a request to update the information here
     // Once the save is successful, set isEditing to false
     const updatedPetInfo = editedPetInfo
 
-    fetch(`api/profile`, {method: "put", body: JSON.stringify(updatedPetInfo)}).then((response) =>{
+    await fetch(`api/profile/petinfo`, {method: "put", body: JSON.stringify(updatedPetInfo)}).then((response) =>{
       if(response.ok){
         console.log("It worked!")
       }
@@ -53,6 +60,7 @@ export default function Profile() {
     });
   };
 
+  //Adds a profile pic for the pet
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0]; 
     if (imageFile) {
@@ -64,6 +72,35 @@ export default function Profile() {
     }
 
   }
+
+  //updates the EditedGallery with the image user provided.
+  const handleImageSelection = (e) => {
+    const images = Array.from(e.target.files);
+    setEditedGallery(images)
+  }; 
+
+  //update display gallery and also save it in the backend
+  async function handleImageUpload () {
+    setGallery((prevGallery) => [...prevGallery, ...editedGallery]);
+    const imageUrls = editedGallery.map((image) => URL.createObjectURL(image));
+    await fetch(`api/profile`, {method: "put", body: JSON.stringify(imageUrls)}).then((response) =>{
+      if(response.ok){
+        console.log("It worked!")
+      }
+    })
+    setEditedGallery([])
+  }
+
+  //memorize gallery to prevent from re rendering if gallery isn't updated.
+  const memorizedGallery = useMemo(() => (
+    gallery.map((image, index) => (
+      <div key={index}>
+        <Image src={URL.createObjectURL(image)} alt={`Gallery Image ${index}`} width={100} height={100} />
+      </div>
+    ))
+    
+  ), [gallery]);
+
 
   return (
     <div className="profile-container">
@@ -109,7 +146,6 @@ export default function Profile() {
           </div>
 
         </div>
-
         <h2>Pet Info</h2>
         <ul className="pet-info-list">
           <li className="pet-info-item">
@@ -202,7 +238,24 @@ export default function Profile() {
             )}
           </li>
         </ul>
-
+        {!isEditing ? (
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageSelection}
+            />
+            <button onClick={handleImageUpload}>+</button> 
+          </div>
+        ): null}
+        
+        {!isEditing && (
+          <div>
+            {memorizedGallery}
+          </div>
+        )}
+        
         {isEditing ? (
             <button onClick={handleSaveClick}>Save</button>
           ) : (
