@@ -25,9 +25,8 @@ export function UploadImageButton() {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     // Do something with the uploaded file (e.g., send it to a server)
-    itemData.push({image: file, title :})
+    //itemData.push({image: file, title :})
   };
-
   return (
     <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
       Upload file
@@ -35,6 +34,36 @@ export function UploadImageButton() {
     </Button>
   );
 }
+
+const PetInfo = () =>{
+  return(
+    <ul className="pet-info-list"> {/* Changed class name */}
+    <li className="pet-info-item">
+      <strong>Species:</strong> Dog
+    </li>
+    <li className="pet-info-item">
+      <strong>Breed:</strong> Labrador Retriever
+    </li>
+    <li className="pet-info-item">
+      <strong>Age:</strong> 3 years
+    </li>
+    <li className="pet-info-item">
+      <strong>Vaccine Status:</strong> Up to date
+    </li>
+    <li className="pet-info-item">
+      <strong>Neuter Status:</strong> Neutered
+    </li>
+    <li className="pet-info-item">
+      <strong>Location:</strong> New York, NY
+    </li>
+  </ul>
+  )
+
+
+
+}
+
+
 export function StandardImageList() {
   return (
 <ImageList sx={{ width: 1026, height: 1026}} cols={3} rowHeight={342}>
@@ -114,46 +143,25 @@ export default function Profile() {
           <h1 className="profile-name">Your Name</h1>
           <p className="profile-bio">Short bio or description goes here.</p>
         </div>
+
+        <div className="additional-profile-image">
+          <Image src="/kevin2.jpg" alt="Additional Profile Picture" width={100} height={100} />
+        </div>
       </div>
+
       <h2>Pet Info</h2>
-      <ul className="pet-info-list"> {/* Changed class name */}
-        <li className="pet-info-item">
-          <strong>Species:</strong> Dog
-        </li>
-        <li className="pet-info-item">
-          <strong>Breed:</strong> Labrador Retriever
-        </li>
-        <li className="pet-info-item">
-          <strong>Age:</strong> 3 years
-        </li>
-        <li className="pet-info-item">
-          <strong>Vaccine Status:</strong> Up to date
-        </li>
-        <li className="pet-info-item">
-          <strong>Neuter Status:</strong> Neutered
-        </li>
-        <li className="pet-info-item">
-          <strong>Location:</strong> New York, NY
-        </li>
-      </ul>
-      <h2>Links</h2>
-      <ul className="skill-list">
-        <li className="skill-item">
-          NextJS: <a href="https://nextjs.org/docs" className="profile-link">https://nextjs.org/docs</a>
-        </li>
-        {/* ... (other links) */}
-      </ul>
+      <PetInfo />
+
       <h2>Photo Gallery</h2>
       <div className="photo-gallery">
         <StandardImageList />
       </div>
 
       <h2>upload</h2>
-      <div className = "upload-button">
+      <div className="upload-button">
         <UploadImageButton />
       </div>
 
-    
     </div>
   );
 }
