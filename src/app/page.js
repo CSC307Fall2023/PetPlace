@@ -19,6 +19,8 @@ import { Icon } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FaceRetouchingNatural } from '@mui/icons-material';
+import Image from 'next/image';
+import Link from 'next/link';
 
 
 
@@ -46,15 +48,12 @@ export default function ToDos() {
 
     const loadingItems = <CircularProgress/>;
     
-    console.log(galleries)
-    const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
-        return <Grid item xs = {2.4}>  
-        <Box sx = {{width: 300, height: 300, border: 5}}>
-        <img src = {photo.imageUrl} width = {200} height = {200}/>
-            {/* <Button sx ={{width: 300, height: 300}} >
-                <img src = {photo.imageUrl} alt = "photos" width = {200} height = {200}/>
-            </Button> */}
-            </Box> 
+    const toDoItems = isLoading ? loadingItems : galleries[0].map((photo, idx) => {
+        return <Grid item xs = {2.4} >  
+            <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
+                <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>
+            </Button>
+        
         </Grid>
     })
 
@@ -98,6 +97,10 @@ export default function ToDos() {
       }
     }
 
+    function getProfile(){
+
+    }
+
 
 
     return (
@@ -115,43 +118,10 @@ export default function ToDos() {
 
             
             <center><Box sx = {{ flexgrow: 1}}>
-              <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 , sm: 2 , md: 0}}>
+              <Grid container rowSpacing = {1} >
                 {toDoItems}
               </Grid>
             </Box></center>
-
-            {/* <List sx={{ width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-            
-            <List sx={{ml: 45, mt: -62, width: '100%', maxWidth: 325, height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-
-            <List sx={{ml: 90, mt: -62, width: '100%', maxWidth: 325 ,height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-            <List sx={{ml: 135, mt: -62, width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-            <List sx={{ml: 180, mt: -62, width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List> */}
         </>
     );
 }
