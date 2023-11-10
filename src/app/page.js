@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from '@mui/icons-material/DeleteForever';
@@ -36,6 +36,7 @@ export default function ToDos() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [galleries, setGalleries] = useState([]);
+    const [isEmpty, setIsEmpty] = useState(true);
 
     useEffect(() => {
         fetch("/api/profile/galleryhome", { method: "get" })
@@ -57,41 +58,55 @@ export default function ToDos() {
         </Grid>
     })
 
-        /*let arry = [1,2,3,4,5,6,7,8,9,10];
+    const cityGallery = isLoading ? loadingItems : galleries[0].map((val) => {
+        if(true === true)
+        {
+            return val;
+        }
+    })
 
-    let items = arry.map(i => {
-      return (<Grid xs = {2.4}>
-        <Item>(i)</Item>
-        </Grid>);
-    })*/
-    /* <Box sx = {{width: '100%' }}>
-        <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 sm: 2 md: 3 }}
-            {items}
-        </Grid>
-      </Box>   */
+    function splitArr(array)
+    {
+        const resu = [];
+        if (array.length === 0)
+        {
+            return [[1]];
+        }
+        else
+        {
+        for (let i = 0; i< array.length; i+=5)
+        {
+            resu.push(array.slice(i,i+5));
+        }
+       
+        return resu;
+    }
+    }
 
-    let arry = [1,2,3,4,5];
+    const splitArray = splitArr(cityGallery);
+
+    let arry = ["PE","TP","LA","CE","!!"];
     let arry2 = [6,7,8,9,10];
     let arry3 = [arry, arry2, arry];
     const [arryInd, setArryInd] = useState(0);
 
-    const slider = isLoading ? loadingItems : arry3[arryInd].map((val, idx) => {
+    const slider = isLoading ? loadingItems : splitArray[arryInd].map((val, idx) => {
       return <Grid item xs = {2.4}>
-        <Box sx = {{width: 300, height: 300, border: 5}}>
-          <Item>{val}</Item>
-        </Box>
+        <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
+                <Image src = {val.imageUrl} alt = "photos" width = {290} height = {290}/>
+            </Button>
       </Grid>
     })
 
     function sliderInc (){
-      if (arryInd >= 0 && arryInd < arry3.length - 1 )
+      if (arryInd >= 0 && arryInd < splitArray.length - 1 )
       {
         setArryInd(arryInd + 1);
       }
     }
 
     function sliderDec (){
-      if (arryInd > 0 && arryInd <= arry3.length - 1)
+      if (arryInd > 0 && arryInd <= splitArray.length - 1)
       {
         setArryInd(arryInd - 1)
       }
