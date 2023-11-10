@@ -74,14 +74,14 @@ export default function ToDos() {
             });
     }
 
-    useEffect(() => {
-        fetch("/api/todos", { method: "get" }).then((response) => response.ok && response.json()).then(
-            todos => {
-                todos && setTodos(todos);
-                setIsLoading(false);
-            }
-        );
-    }, []);
+    // useEffect(() => {
+    //     fetch("/api/todos", { method: "get" }).then((response) => response.ok && response.json()).then(
+    //         todos => {
+    //             todos && setTodos(todos);
+    //             setIsLoading(false);
+    //         }
+    //     );
+    // }, []);
 
     const loadingItems = <CircularProgress/>;
 
@@ -146,7 +146,9 @@ export default function ToDos() {
         fetch("/api/profile/galleryhome", { method: "get" })
           .then((response) => response.ok && response.json())
           .then((petphoto) => {
-            setGalleries(petphoto);
+            setGalleries(petphoto)
+            setIsLoading(false);
+
           });
       }, [])
 

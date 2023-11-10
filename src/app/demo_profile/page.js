@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image';
-import { useState, useMemo} from 'react';
+import { useEffect, useState, useMemo} from 'react';
 import './style.css';
 
 
@@ -9,7 +9,6 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [gallery, setGallery] = useState([]);
   const [editedGallery, setEditedGallery] = useState([]);
-
   //const [showUploadedImages, setShowUploadedImages] = useState(false);
 
   const petInfo = {
@@ -90,6 +89,42 @@ export default function Profile() {
     })
     setEditedGallery([])
   }
+  
+
+  useEffect(() => {
+    console.log("mount")
+    const fetchPetInfo = async () => {
+      try {
+        const response = await fetch(`api/profile/petinfo/getter`, {method: "get"})
+        if(response.ok){
+          const data = await response.json(); // Parse the JSON response
+          setEditedPetInfo(data);
+          // console.log(response)
+          // console.log(data)
+          // console.log(editedGallery)
+        }
+      } catch (error) {
+        console.error('Error fetching pet information:', error);
+      }
+    };
+    // const fetchpetGal = async () =>{
+    //   try {
+    //     const response2 = await fetch(`api/profile/galleryhome/getter`, {method: "get"})
+    //     if(response2.ok){
+    //       const data2 = await response2.json()
+    //       setGallery(data2)
+    //       console.log(data2)
+    //     }
+        
+    //   } catch(error){
+    //     console.error('Error fetching pet information:', error);
+    //   }
+    // }
+
+    fetchPetInfo();
+    // fetchpetGal()
+  }, []);
+
 
   //memorize gallery to prevent from re rendering if gallery isn't updated.
   const memorizedGallery = useMemo(() => (
