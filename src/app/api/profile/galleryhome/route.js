@@ -3,11 +3,11 @@ import prisma from "@/lib/db";
 import { checkLoggedIn } from "@/lib/auth";
 
 export async function GET(request) {
-  const gallery = []
-  let photogallery = await prisma.PetPhoto.findMany()
-  gallery.push(photogallery)
   
-  return NextResponse.json(gallery);
+  const photogallery = await prisma.PetPhoto.findMany()
+  
+  
+  return NextResponse.json(photogallery);
   
 }
 // const users = await prisma.User.findMany();

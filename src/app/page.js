@@ -41,15 +41,15 @@ export default function ToDos() {
     useEffect(() => {
         fetch("/api/profile/galleryhome", { method: "get" })
           .then((response) => response.ok && response.json())
-          .then((petphoto) => {
-            setGalleries(petphoto);
+          .then(galleries => {
+            galleries && setGalleries(galleries);
             setIsLoading(false);
           });
       }, [])
 
     const loadingItems = <CircularProgress/>;
     
-    const toDoItems = isLoading ? loadingItems : galleries[0].map((photo, idx) => {
+    const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
         return <Grid item xs = {2.4} >  
             <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
                 <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>
@@ -58,7 +58,7 @@ export default function ToDos() {
         </Grid>
     })
 
-    const cityGallery = isLoading ? loadingItems : galleries[0].map((val) => {
+    const cityGallery = isLoading ? loadingItems : galleries.map((val) => {
         if(true === true)
         {
             return val;
