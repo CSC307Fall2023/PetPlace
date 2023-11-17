@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from '@mui/icons-material/DeleteForever';
@@ -19,6 +19,8 @@ import { Icon } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FaceRetouchingNatural } from '@mui/icons-material';
+import Image from 'next/image';
+import Link from 'next/link';
 
 
 
@@ -32,178 +34,111 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ToDos() {
 
-    const [todos, setTodos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [newTodo, setNewTodo] = useState('');
-    const [todosList, setTodosList] = useState([]);
-    const [galleries, setGalleries] = useState([])
+    const [galleries, setGalleries] = useState([]);
+    const [isEmpty, setIsEmpty] = useState(true);
 
-    function inputChangeHandler(e) {
-        setNewTodo(e.target.value);
-    }
-
-    function addNewTodo({index}) {
-        if(newTodo && newTodo.length) {
-            fetch("api/todos", { method: "post", body: JSON.stringify({value: newTodo, done: false}) } ).then((response) => {
-                return response.json().then((newTodo) => {
-                    setTodos([...todos, newTodo]);
-                    setNewTodo('');
-                });
-            });
-            
-        }
-    }
-
-    function removeTodo({ index }) {
-        var remv = todos[index];
-        fetch(`api/todos/${remv.id}`, { method: "delete"}).then();
-        setTodos(todos.filter((v,idx) => idx!==index));
-    }
-
-    function makeCheck ({index}) {
-        var tar = todos[index];
-        fetch(`api/todos/${tar.id}`, { method: "put", body: JSON.stringify({value: tar.value, done: !tar.done})}).then((response) => {
-        setTodos(todos.map((value) => {
-            if (value.id === tar.id) {
-                return {...tar, done: !tar.done};
-            }
-            else {
-                return value;
-            }
-                } ))
-            });
-    }
-
-    // useEffect(() => {
-    //     fetch("/api/todos", { method: "get" }).then((response) => response.ok && response.json()).then(
-    //         todos => {
-    //             todos && setTodos(todos);
-    //             setIsLoading(false);
-    //         }
-    //     );
-    // }, []);
+    useEffect(() => {
+        fetch("/api/profile/galleryhome", { method: "get" })
+          .then((response) => response.ok && response.json())
+          .then(galleries => {
+            galleries && setGalleries(galleries);
+            console.log(galleries)
+            setIsLoading(false);
+          });
+      }, [])
 
     const loadingItems = <CircularProgress/>;
-
-    const toDoItems = isLoading ? loadingItems : todos.map((todo, idx) => {
-        return <Grid item xs = {2.4}>  
-        <Box key={idx} secondaryAction={
-            <Button edge="end" onClick={() => removeTodo({index: idx})}><DeleteForever/></Button>   
-        }>  
-        <Box sx = {{width: 300, height: 300, border: 5}}>
-            <Button sx ={{width: 300, height: 300}} >
-                <Icon>
-                    <Checkbox checked={todo.done} disableRipple onChange={() => makeCheck({index: idx})}/>
-                </Icon>
-                <TextField primary={todo.value}/>
+    
+    const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
+        let link = `/demo_profile/${photo.petProfileId}`;
+        return <Grid item xs = {2.4} >  
+            <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
+                <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>
             </Button>
-            </Box> 
-        </Box>
+        
         </Grid>
     })
 
-        /*let arry = [1,2,3,4,5,6,7,8,9,10];
+    const cityGallery = isLoading ? loadingItems : galleries.map((val) => {
+        if(true === true)
+        {
+            return val;
+        }
+    })
 
-    let items = arry.map(i => {
-      return (<Grid xs = {2.4}>
-        <Item>(i)</Item>
-        </Grid>);
-    })*/
-    /* <Box sx = {{width: '100%' }}>
-        <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 sm: 2 md: 3 }}
-            {items}
-        </Grid>
-      </Box>   */
+    function splitArr(array)
+    {
+        const resu = [];
+        if (array.length === 0)
+        {
+            return [[1]];
+        }
+        else
+        {
+        for (let i = 0; i< array.length; i+=5)
+        {
+            resu.push(array.slice(i,i+5));
+        }
+       
+        return resu;
+    }
+    }
 
-    let arry = [1,2,3,4,5];
+    const splitArray = splitArr(cityGallery);
+
+    let arry = ["PE","TP","LA","CE","!!"];
     let arry2 = [6,7,8,9,10];
     let arry3 = [arry, arry2, arry];
     const [arryInd, setArryInd] = useState(0);
 
-    const slider = isLoading ? loadingItems : arry3[arryInd].map((val, idx) => {
+    const slider = isLoading ? loadingItems : splitArray[arryInd].map((val, idx) => {
       return <Grid item xs = {2.4}>
-        <Box sx = {{width: 300, height: 300, border: 5}}>
-          <Item>{val}</Item>
-        </Box>
+        <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
+                <Image src = {val.imageUrl} alt = "photos" width = {290} height = {290}/>
+            </Button>
       </Grid>
     })
 
     function sliderInc (){
-      if (arryInd >= 0 && arryInd < arry3.length - 1 )
+      if (arryInd >= 0 && arryInd < splitArray.length - 1 )
       {
         setArryInd(arryInd + 1);
       }
     }
 
     function sliderDec (){
-      if (arryInd > 0 && arryInd <= arry3.length - 1)
+      if (arryInd > 0 && arryInd <= splitArray.length - 1)
       {
         setArryInd(arryInd - 1)
       }
     }
 
-    useEffect(() => {
-        fetch("/api/profile/galleryhome", { method: "get" })
-          .then((response) => response.ok && response.json())
-          .then((petphoto) => {
-            setGalleries(petphoto)
-            setIsLoading(false);
+    function getProfile(){
 
-          });
-      }, [])
+    }
+
+
 
     return (
         <>
          {/* <li> link: <a href="/demo_profile"> demo profile page</a>   </li> */}
             <h2><center>Explore</center></h2>
-            <Box sx = {{ flexgrow: 1}}>
-              <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 , sm: 2 , md: 0}}>
+            <center><Box sx = {{flexgrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <Grid container justifyContent = "center" alignItems = "center" rowSpacing = {1} >
                 {slider}
-                {!isLoading && <ListItem key="leftArrow" secondaryAction={<IconButton sx={{mr: 216, mb: 40}} onClick={sliderDec}><ArrowBackIosIcon sx={{color: 'black'}} /></IconButton>}></ListItem> }
-                {!isLoading && <ListItem key="rightrrow" secondaryAction={<IconButton sx={{mr: 0, mb: 40}} onClick={sliderInc}><ArrowForwardIosIcon sx={{color: 'black'}} /></IconButton>}>
-                  </ListItem>}
+                {!isLoading && <ListItem key="leftArrow" secondaryAction={<IconButton sx={{mr: 213, mb: 45}} onClick={sliderDec}><ArrowBackIosIcon sx={{color: 'black'}} /></IconButton>}></ListItem> }
+                {!isLoading && <ListItem key="rightrrow" secondaryAction={<IconButton sx={{mr: -3.3, mb: 45}} onClick={sliderInc}><ArrowForwardIosIcon sx={{color: 'black'}} /></IconButton>}>
+                  </ListItem>}  
               </Grid>
-            </Box>
+            </Box></center>
 
             
-            <Box sx = {{ flexgrow: 1}}>
-              <Grid container rowSpacing = {1} columnSpacing = {{ xs: 1 , sm: 2 , md: 0}}>
+            <center><Box sx = {{ flexgrow: 1}}>
+              <Grid container rowSpacing = {1} >
                 {toDoItems}
               </Grid>
-            </Box>
-
-            {/* <List sx={{ width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-            
-            <List sx={{ml: 45, mt: -62, width: '100%', maxWidth: 325, height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-
-            <List sx={{ml: 90, mt: -62, width: '100%', maxWidth: 325 ,height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-            <List sx={{ml: 135, mt: -62, width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List>
-            <List sx={{ml: 180, mt: -62, width: '100%', maxWidth: 325 , height: '100%', maxHeight: 500}}>
-                { toDoItems }
-                {!isLoading && <ListItem key="newItem" secondaryAction={<IconButton edge="end" onClick={addNewTodo}><AddBox/></IconButton>}>
-                    <TextField label="New ToDo Item" fullWidth variant="outlined" value={newTodo} onChange={inputChangeHandler}/> 
-                </ListItem>}
-            </List> */}
+            </Box></center>
         </>
     );
 }

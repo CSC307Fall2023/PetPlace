@@ -2,22 +2,25 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { checkLoggedIn } from "@/lib/auth";
 
-export async function GET(request) {
-  const loggedInData = await checkLoggedIn();
-  if(loggedInData.loggedIn){
-    const getinfo = await prisma.PetProfile.findFirst({
-        where: {userId: loggedInData.user.id}
+export async function GET(request, { params }) {
+    const id = parseInt(params.id);
+    console.log("HERE")
+    const getOther = await prisma.PetProfile.findFirst({
+        where: {petId: id}
     })
-    if(getinfo){
-        console.log(getinfo)
-        return NextResponse.json(getinfo);
+    if(getOther){
+        console.log(getOther)
+        return NextResponse.json(getOther);
     }
-    else{
+    else
+    {
       return NextResponse.json({status: "No Profile"})
     }
+
+    // return NextResponse.json({error: 'not signed in'}, {status: 403});
+
   }
-  return NextResponse.json({error: 'not signed in'}, {status: 403});
-}
+
 
 // export async function GET(request) {
 //   const loggedInData = await checkLoggedIn();

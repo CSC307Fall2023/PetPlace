@@ -6,12 +6,15 @@ export async function GET(request) {
   const loggedInData = await checkLoggedIn();
   if(loggedInData.loggedIn){
     const getpetprofile = await prisma.PetProfile.findFirst({
-        where: {userId: loggedInData.id}
+        where: {userId: loggedInData.user.id},
+        include: {
+            petPhotos: true, // Include the associated pet photos
+          },
     })
     if(getpetprofile){
-        return NextResponse.json(getpetprofile.petPhotos)
+        const photourls = getpetprofile.petPhotos.map((photo) => photo.imageUrl)
+        return NextResponse.json(photourls)
     }
-    return NextResponse.json({error: 'petprofile doesnt have a gallery'}, {status: 405});
 
   }
   
