@@ -50,8 +50,9 @@ export default function ToDos() {
     const loadingItems = <CircularProgress/>;
     
     const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
+        let link = `/demo_profile/${photo.profileid}`;
         return <Grid item xs = {2.4} >  
-            <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
+            <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>
             </Button>
         
