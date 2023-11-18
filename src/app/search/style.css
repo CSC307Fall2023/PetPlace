@@ -72,3 +72,8 @@ body {
   color: #777;
   margin: 5px 0;
 }
+.clickable {
+  cursor: pointer;
+  /* Add any other styles to indicate it's clickable */
+}
+
