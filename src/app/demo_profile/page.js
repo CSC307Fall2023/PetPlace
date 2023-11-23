@@ -173,9 +173,9 @@ export default function Profile() {
               {isEditing ? (
                 <input
                   type="text"
-                  name="name"
+                  name="petName"
                   placeholder = "Pet Name"
-                  value={editedPetInfo.name}
+                  value={editedPetInfo.petName}
                   onChange={handleInputChange}
                 />
               ) : (
@@ -249,8 +249,8 @@ export default function Profile() {
             <strong>Vaccine Status:</strong>
             {isEditing ? (
               <select
-                name="vaccineStatus"
-                value={editedPetInfo.vaccineStatus}
+                name="vaxxed"
+                value={editedPetInfo.vaxxed}
                 onChange={handleInputChange}
               > 
                 <option value = "...">...</option>
@@ -265,8 +265,8 @@ export default function Profile() {
             <strong>Neuter Status:</strong>
             {isEditing ? (
               <select
-                name="neuterStatus"
-                value={editedPetInfo.neuterStatus}
+                name="sprayedNeutered"
+                value={editedPetInfo.sprayedNeutered}
                 onChange={handleInputChange}
               > 
                 <option value = "...">...</option>

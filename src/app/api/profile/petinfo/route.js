@@ -6,7 +6,7 @@ export async function PUT(request) {
   const loggedInData = await checkLoggedIn();
   
   if (loggedInData.loggedIn) {
-    let { name, species, breed, age, vaccineStatus, neuterStatus, location, bio, profileImage } = await request.json();
+    let { petName, species, breed, age, vaxxed, sprayedNeutered, location, bio, profileImage } = await request.json();
     if(age === '...'){
       age = 0
     }
@@ -24,12 +24,12 @@ export async function PUT(request) {
             petId: existingPetProfile.petId,
           },
           data: {
-            petName: name,
+            petName: petName,
             species: species,
             breed: breed,
             age: age,
-            vaxxed: vaccineStatus,
-            sprayedNeutered: neuterStatus,
+            vaxxed: vaxxed,
+            sprayedNeutered: sprayedNeutered,
             location: location, // Assuming this field is in your schema
             bio: bio, // Assuming this field is in your schema
             profileImage: profileImage, // Assuming this field is in your schema
@@ -44,12 +44,12 @@ export async function PUT(request) {
       try {
         const newPetProfile = await prisma.PetProfile.create({
           data: {
-            petName: name,
+            petName: petName,
             species: species,
             breed: breed,
             age: age,
-            vaxxed: vaccineStatus,
-            sprayedNeutered: neuterStatus,
+            vaxxed: vaxxed,
+            sprayedNeutered: sprayedNeutered,
             location: location, // Assuming this field is in your schema
             bio: bio, // Assuming this field is in your schema
             profileImage: profileImage, // Assuming this field is in your schema
