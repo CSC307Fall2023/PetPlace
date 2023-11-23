@@ -43,6 +43,7 @@ export default function ToDos() {
           .then((response) => response.ok && response.json())
           .then(galleries => {
             galleries && setGalleries(galleries);
+            console.log(galleries)
             setIsLoading(false);
           });
       }, [])
@@ -50,7 +51,7 @@ export default function ToDos() {
     const loadingItems = <CircularProgress/>;
     
     const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
-        let link = `/demo_profile/${photo.profileid}`;
+        let link = `/demo_profile/${photo.petProfileId}`;
         return <Grid item xs = {2.4} >  
             <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>

@@ -3,9 +3,8 @@ import prisma from "@/lib/db";
 import { checkLoggedIn } from "@/lib/auth";
 
 export async function GET(request) {
-  
-  const photogallery = await prisma.PetPhoto.findMany()
-  
+  let photogallery = await prisma.PetPhoto.findMany()
+
   
   return NextResponse.json(photogallery);
   
