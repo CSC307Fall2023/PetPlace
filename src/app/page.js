@@ -37,16 +37,67 @@ export default function ToDos() {
     const [isLoading, setIsLoading] = useState(true);
     const [galleries, setGalleries] = useState([]);
     const [isEmpty, setIsEmpty] = useState(true);
+    const [curProfile, setCurProfile] = useState({
+      petName: '...',
+      species: '...',
+      breed: '...',
+      age: '...',
+      vaxxed: '...',
+      sprayedNeutered: '...',
+      location: '...',
+      bio: '...',
+      profileImage: '/goated.jpg', // Example URL for the profile image
+    });
 
-    useEffect(() => {
-        fetch("/api/profile/galleryhome", { method: "get" })
-          .then((response) => response.ok && response.json())
-          .then(galleries => {
-            galleries && setGalleries(galleries);
-            console.log(galleries)
-            setIsLoading(false);
-          });
-      }, [])
+    // useEffect(() => {
+    //     fetch("/api/profile/galleryhome", { method: "get" })
+    //       .then((response) => response.ok && response.json())
+    //       .then(galleries => {
+    //         galleries && setGalleries(galleries);
+    //         console.log(galleries)
+    //         setIsLoading(false);
+    //       });
+    //   }, [])
+
+      useEffect(() => {
+        console.log("mount")
+        const fetchPetInfo = async () => {
+          try {
+            const response = await fetch(`api/profile/petinfo/getter`, {method: "get"})
+            if(response.ok){
+              const data = await response.json(); // Parse the JSON response
+              if(data.status === 'No Profile'){
+                setIsEditing(true)
+              }
+              else{
+                setEditedPetInfo(data);
+              }
+              console.log(data)
+            }
+          } catch (error) {
+            console.error('Error fetching pet information:', error);
+          }
+        };
+        
+        const fetchpetGal = async () =>{
+          try {
+            const response2 = await fetch("/api/profile/galleryhome", { method: "get" })
+            if(response2.ok){
+              const data2 = await response2.json()
+              setGalleries(data2);
+              console.log(data2);
+              setIsLoading(false);
+            }
+            
+          } catch(error){
+            console.error('Error fetching gallery information:', error);
+          }
+        }
+    
+        fetchPetInfo();
+        fetchpetGal()
+      }, []);
+    
 
     const loadingItems = <CircularProgress/>;
     
