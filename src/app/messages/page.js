@@ -48,7 +48,7 @@ export default function Messages() {
 
   const handleSendMessage = () => {
     // Simulate sending a message
-    const updatedMessages = [...currentChatroom.messages, { sender: 'User1', content: newMessage }];
+    const updatedMessages = [...currentChatroom.messages, { sender: 'User', content: newMessage }];
     setCurrentChatroom({ ...currentChatroom, messages: updatedMessages });
 
     // Reset the new message input
@@ -89,7 +89,7 @@ export default function Messages() {
         </div>
         <div className="chatroom-messages">
           {currentChatroom.messages.map((message, index) => (
-            <div key={index} className="message">
+            <div key={index} className={`message ${message.sender === 'User' ? 'my-message' : 'other-message'}`}>
               <p className="message-sender">{message.sender}</p>
               <p className="message-content">{message.content}</p>
             </div>
