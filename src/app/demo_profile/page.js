@@ -66,14 +66,16 @@ export default function Profile() {
 
   //Adds a profile pic for the pet
   const handleImageChange = (e) => {
-    const imageFile = e.target.files[0]; 
-    if (imageFile) {
+
+    const images = Array.from(e.target.files);
+    const file = images[0];
+    const reader = new FileReader();
+    reader.onload = () => {
       setEditedPetInfo({
-        ...editedPetInfo, 
-        profileImage: URL.createObjectURL(imageFile), 
-        imageFile
-      })
-    }
+        ...editedPetInfo,
+        profileImage:  reader.result, file})
+    };
+    reader.readAsDataURL(file);
 
   }
 
