@@ -70,9 +70,9 @@ export default function ToDos() {
                 setIsEditing(true)
               }
               else{
-                setEditedPetInfo(data);
+                setCurProfile(data);
               }
-              console.log(data)
+              //console.log(data)
             }
           } catch (error) {
             console.error('Error fetching pet information:', error);
@@ -85,7 +85,7 @@ export default function ToDos() {
             if(response2.ok){
               const data2 = await response2.json()
               setGalleries(data2);
-              console.log(data2);
+              //console.log(data2);
               setIsLoading(false);
             }
             
@@ -111,10 +111,11 @@ export default function ToDos() {
         </Grid>
     })
 
-    const cityGallery = isLoading ? loadingItems : galleries.map((val) => {
-        if(true === true)
+    const cityGallery = isLoading ? loadingItems : galleries.map((vals) => {
+        if(vals.location === curProfile.location)
         {
-            return val;
+            console.log(vals)
+            return vals;
         }
     })
 

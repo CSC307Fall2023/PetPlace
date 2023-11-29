@@ -21,8 +21,8 @@ export async function PUT(request) {
           const photogal = await prisma.PetPhoto.create({
             data: {
               imageUrl: one,
-              petProfileId: existingPetProfile.petId
-
+              petProfileId: existingPetProfile.petId,
+              location: existingPetProfile.location
             },
           });
           return NextResponse.json(photogal);
@@ -36,7 +36,8 @@ export async function PUT(request) {
           const petphoto = await prisma.PetPhoto.create({
             data: {
               imageUrl: one,
-              petProfileId: existingPetProfile.petId
+              petProfileId: existingPetProfile.petId,
+              location: existingPetProfile.location
             },
           });
           return NextResponse.json(petphoto);

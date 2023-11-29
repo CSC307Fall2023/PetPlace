@@ -119,7 +119,7 @@ export default function Profile() {
           else{
             setEditedPetInfo(data);
           }
-          console.log(data)
+          //console.log(data)
         }
       } catch (error) {
         console.error('Error fetching pet information:', error);

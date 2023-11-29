@@ -37,6 +37,7 @@ model PetProfile {
 }
 
 model PetPhoto {
+  location     String
   photoId      Int        @id @default(autoincrement())
   imageUrl     String
   petProfileId Int
