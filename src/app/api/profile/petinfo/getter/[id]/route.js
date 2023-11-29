@@ -4,12 +4,10 @@ import { checkLoggedIn } from "@/lib/auth";
 
 export async function GET(request, { params }) {
     const id = parseInt(params.id);
-    console.log("HERE")
     const getOther = await prisma.PetProfile.findFirst({
         where: {petId: id}
     })
     if(getOther){
-        console.log(getOther)
         return NextResponse.json(getOther);
     }
     else

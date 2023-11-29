@@ -9,7 +9,6 @@ export async function GET(request) {
         where: {userId: loggedInData.user.id}
     })
     if(getinfo){
-        console.log(getinfo)
         return NextResponse.json(getinfo);
     }
     else{

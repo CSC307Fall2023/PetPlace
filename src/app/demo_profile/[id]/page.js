@@ -9,7 +9,6 @@ import Link from 'next/link';
 export default function otherProfile({params}) {
   const [gallery, setGallery] = useState([]);
   const idPhoto = parseInt(params.id);
-  console.log(idPhoto)
   //const [showUploadedImages, setShowUploadedImages] = useState(false);
 
   const [petInfo, setPetInfo] = useState({
@@ -50,7 +49,6 @@ export default function otherProfile({params}) {
           else{
             setEditedPetInfo(data);
           }
-          console.log(data)
         }
       } catch (error) {
         console.error('Error fetching pet information:', error);

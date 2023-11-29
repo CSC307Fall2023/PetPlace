@@ -72,7 +72,6 @@ export default function ToDos() {
               else{
                 setEditedPetInfo(data);
               }
-              console.log(data)
             }
           } catch (error) {
             console.error('Error fetching pet information:', error);
@@ -85,7 +84,6 @@ export default function ToDos() {
             if(response2.ok){
               const data2 = await response2.json()
               setGalleries(data2);
-              console.log(data2);
               setIsLoading(false);
             }
             
