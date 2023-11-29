@@ -49,6 +49,7 @@ export default function otherProfile({params}) {
           else{
             setEditedPetInfo(data);
           }
+          //console.log(data)
         }
       } catch (error) {
         console.error('Error fetching pet information:', error);
