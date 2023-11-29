@@ -1,8 +1,11 @@
 'use client'
 import Image from 'next/image';
 import Link from 'next/link'; // Import Link
-import React from 'react';
+import React, { useState } from 'react';
+
+import { useEffect, useMemo} from 'react';
 import './style.css';
+import { MenuItem } from '@mui/material';
 
 const profiles = [
   {
@@ -55,12 +58,30 @@ const profiles = [
   },
 ];
 
+
+
 export default function SearchPage() {
   const [searchInput, setSearchInput] = React.useState('');
+  const [profileList, setProfileList] = useState([]);
 
-  const filteredProfiles = profiles.filter(
+  useEffect(() => {
+    console.log("mount")
+    fetch(`api/profile/search`, {method: "get"}).then((response) => response.json()).then((profile) => {
+      setProfileList(profile)
+    });
+  }, []);
+
+  // async function handleSearchClick () {  
+  //     await fetch(`api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
+  //       setProfileList(profile);
+  //     });
+  
+  // };
+
+  
+  const filteredProfiles = profileList.filter(
     (profile) =>
-      profile.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+      profile.petName.toLowerCase().includes(searchInput.toLowerCase()) ||
       profile.species.toLowerCase().includes(searchInput.toLowerCase()) ||
       profile.breed.toLowerCase().includes(searchInput.toLowerCase()) ||
       profile.location.toLowerCase().includes(searchInput.toLowerCase())
@@ -69,6 +90,7 @@ export default function SearchPage() {
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
   };
+
   return (
     <div className="search-page-container">
       <div className="search-bar">
@@ -79,7 +101,7 @@ export default function SearchPage() {
           value={searchInput}
           onChange={handleInputChange}
         />
-        <button className="search-button">Search</button>
+        <button className="search-button" >Search</button>
       </div>
       <div className="profile-list">
         {filteredProfiles.map((profile) => (
@@ -90,7 +112,7 @@ export default function SearchPage() {
                 <Image src={`/${profile.image}`} alt="Profile Picture" width={200} height={200} />
               </div>
               <div className="profile-details">
-                <h2 className="profile-name">{profile.name}</h2>
+                <h2 className="profile-name">{profile.petName}</h2>
                 <p className="profile-species">Species: {profile.species}</p>
                 <p className="profile-breed">Breed: {profile.breed}</p>
                 <p className="profile-location">Location: {profile.location}</p>
