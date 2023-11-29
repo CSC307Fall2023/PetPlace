@@ -61,41 +61,40 @@ export default function ToDos() {
 
       useEffect(() => {
         console.log("mount")
-        const fetchPetInfo = async () => {
-          try {
-            const response = await fetch(`api/profile/petinfo/getter`, {method: "get"})
-            if(response.ok){
-              const data = await response.json(); // Parse the JSON response
-              if(data.status === 'No Profile'){
-                setIsEditing(true)
-              }
-              else{
-                setCurProfile(data);
-              }
-              //console.log(data)
-            }
-          } catch (error) {
-            console.error('Error fetching pet information:', error);
-          }
-        };
-        
-        const fetchpetGal = async () =>{
-          try {
-            const response2 = await fetch("/api/profile/galleryhome", { method: "get" })
-            if(response2.ok){
-              const data2 = await response2.json()
-              setGalleries(data2);
-              //console.log(data2);
-              setIsLoading(false);
-            }
+        fetch(`api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
+          return fetch("/api/profile/galleryhome", { method: "get" }).then(res => res.json()).then((gallery) => {
+            setCurProfile(profile);
+            setGalleries(gallery);
+            setIsLoading(false);
+          });
+        });
+        // async function fetchPetInfo() {
+        //   try {
+        //     const response = await 
+        //     if(response.ok){
+        //       const data = await response.json(); // Parse the JSON response    
+              
+        //       //console.log(data)
+        //     }
+        //   } catch (error) {
+        //     console.error('Error fetching pet information:', error);
+        //   }
+
+        //   try {
+        //     const response2 = await 
+        //     if(response2.ok){
+        //       const data2 = await response2.json()
+        //       setGalleries(data2);
+        //     }
             
-          } catch(error){
-            console.error('Error fetching gallery information:', error);
-          }
-        }
+        //   } catch(error){
+        //     console.error('Error fetching gallery information:', error);
+        //   }
+        //   return "done";
+        // }
     
-        fetchPetInfo();
-        fetchpetGal()
+        // let done = await fetchPetInfo();
+        // setIsLoading(false)
       }, []);
     
 
@@ -111,13 +110,10 @@ export default function ToDos() {
         </Grid>
     })
 
-    const cityGallery = isLoading ? loadingItems : galleries.map((vals) => {
-        if(vals.location === curProfile.location)
-        {
-            console.log(vals)
-            return vals;
-        }
-    })
+    console.log (curProfile)
+    
+    const cityGallery = isLoading ? loadingItems : galleries.filter((vals) => {
+        return (vals.location === curProfile.location) })
 
     function splitArr(array)
     {
@@ -137,14 +133,14 @@ export default function ToDos() {
     }
     }
 
-    const splitArray = splitArr(cityGallery);
 
     let arry = ["PE","TP","LA","CE","!!"];
     let arry2 = [6,7,8,9,10];
     let arry3 = [arry, arry2, arry];
     const [arryInd, setArryInd] = useState(0);
 
-    const slider = isLoading ? loadingItems : splitArray[arryInd].map((val, idx) => {
+    debugger;
+    const slider = isLoading ? loadingItems :  splitArr(cityGallery)[arryInd].map((val, idx) => {
       return <Grid item xs = {2.4}>
         <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
                 <Image src = {val.imageUrl} alt = "photos" width = {290} height = {290}/>
