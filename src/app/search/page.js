@@ -1,75 +1,103 @@
+'use client'
 import Image from 'next/image';
+import Link from 'next/link'; // Import Link
+import React from 'react';
 import './style.css';
 
+const profiles = [
+  {
+    id: 'alex',
+    name: 'Alex',
+    species: 'Bird',
+    breed: 'Blue Macaw',
+    location: 'Rio, BZ',
+    image: 'profile-picture.jpg',
+  },
+  {
+    id: 'jithan',
+    name: 'Jithan',
+    species: 'Cat',
+    breed: 'Siamese',
+    location: 'Los Angeles, CA',
+    image: 'profile-picture.jpg',
+  },
+  {
+    id: 'gus',
+    name: 'Gus',
+    species: 'Cat',
+    breed: 'Orange',
+    location: 'San Diego, CA',
+    image: 'profile-picture.jpg',
+  },
+  {
+    id: 'ricky',
+    name: 'Ricky',
+    species: 'Pupper',
+    breed: 'Smol',
+    location: 'Las Vegas, NV',
+    image: 'profile-picture.jpg',
+  },
+  {
+    id: 'muhammed',
+    name: 'Muhammed',
+    species: 'Cat',
+    breed: 'Garfield',
+    location: 'Chicago, IL',
+    image: 'profile-picture.jpg',
+  },
+  {
+    id: 'david',
+    name: 'David',
+    species: 'Werewolf',
+    breed: 'American',
+    location: 'London',
+    image: 'david.jpg',
+  },
+];
+
 export default function SearchPage() {
+  const [searchInput, setSearchInput] = React.useState('');
+
+  const filteredProfiles = profiles.filter(
+    (profile) =>
+      profile.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+      profile.species.toLowerCase().includes(searchInput.toLowerCase()) ||
+      profile.breed.toLowerCase().includes(searchInput.toLowerCase()) ||
+      profile.location.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
+  const handleInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
   return (
     <div className="search-page-container">
       <div className="search-bar">
-        <input type="text" placeholder="Search Profiles" className="search-input" />
+        <input
+          type="text"
+          placeholder="Search Profiles"
+          className="search-input"
+          value={searchInput}
+          onChange={handleInputChange}
+        />
         <button className="search-button">Search</button>
       </div>
       <div className="profile-list">
-        {/* Profile Card 1 */}
-        <div className="profile-card">
-          <div className="profile-image">
-            <Image src="/profile-picture.jpg" alt="Profile Picture" width={200} height={200} />
-          </div>
-          <div className="profile-details">
-            <h2 className="profile-name">Alex</h2>
-            <p className="profile-species">Species: Bird</p>
-            <p className="profile-breed">Breed: Blue Macaw</p>
-            <p className="profile-location">Location: Rio, BZ</p>
-          </div>
-        </div>
-        
-        {/* Profile Card 2 (You can add more profiles) */}
-        <div className="profile-card">
-          <div className="profile-image">
-            <Image src="/profile-picture.jpg" alt="Profile Picture" width={200} height={200} />
-          </div>
-          <div className="profile-details">
-            <h2 className="profile-name">Jithan</h2>
-            <p className="profile-species">Species: Cat</p>
-            <p className="profile-breed">Breed: Siamese</p>
-            <p className="profile-location">Location: Los Angeles, CA</p>
-          </div>
-        </div>
-        {/* Profile Card 3 (You can add more profiles) */}
-        <div className="profile-card">
-          <div className="profile-image">
-            <Image src="/profile-picture.jpg" alt="Profile Picture" width={200} height={200} />
-          </div>
-          <div className="profile-details">
-            <h2 className="profile-name">Gus</h2>
-            <p className="profile-species">Species: Dog</p>
-            <p className="profile-breed">Breed: Chonker</p>
-            <p className="profile-location">Location: San Diego, CA</p>
-          </div>
-        </div>
-        {/* Profile Card 4 (You can add more profiles) */}
-        <div className="profile-card">
-          <div className="profile-image">
-            <Image src="/profile-picture.jpg" alt="Profile Picture" width={200} height={200} />
-          </div>
-          <div className="profile-details">
-            <h2 className="profile-name">Muhammad</h2>
-            <p className="profile-species">Species: Cat</p>
-            <p className="profile-breed">Breed: Garfield</p>
-            <p className="profile-location">Location: Where ever Garfield from, CA</p>
-          </div>
-        </div>
-        {/* Profile Card 5 (You can add more profiles) */}
-        <div className="profile-card">
-          <div className="profile-image">
-            <Image src="/profile-picture.jpg" alt="Profile Picture" width={200} height={200} />
-          </div>
-          <div className="profile-details">
-            <h2 className="profile-name">Ricky</h2>
-            <p className="profile-species">Species: Dog</p>
-            <p className="profile-breed">Breed: Pupper</p>
-            <p className="profile-location">Location: Las Vegas, NV</p>
-          </div>
-        </div>
+        {filteredProfiles.map((profile) => (
+          <Link key={profile.id} href="/profile/[id]" as={`/profile/${profile.id}`}>
+            <div className="profile-card clickable">
+              <div className="profile-image">
+                {/* Use the 'image' property from the profile */}
+                <Image src={`/${profile.image}`} alt="Profile Picture" width={200} height={200} />
+              </div>
+              <div className="profile-details">
+                <h2 className="profile-name">{profile.name}</h2>
+                <p className="profile-species">Species: {profile.species}</p>
+                <p className="profile-breed">Breed: {profile.breed}</p>
+                <p className="profile-location">Location: {profile.location}</p>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );
