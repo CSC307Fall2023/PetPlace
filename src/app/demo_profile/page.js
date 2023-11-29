@@ -11,6 +11,7 @@ export default function Profile() {
   const [gallery, setGallery] = useState([]);
   const [editedGallery, setEditedGallery] = useState([]);
 
+
   //const [showUploadedImages, setShowUploadedImages] = useState(false);
 
   const [petInfo, setPetInfo] = useState({
