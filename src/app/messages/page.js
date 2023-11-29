@@ -31,6 +31,23 @@ const chatrooms = [
   },
 ];
 
+function createChatroom(name) {
+  const newChatroom = {
+    id: chatrooms.length +1, // You might want to ensure unique IDs
+    name: name,
+    messages: [],
+  };
+
+  return newChatroom;
+}
+
+const newChatroom = createChatroom('NewChatroom');
+chatrooms.push(newChatroom);
+const second = createChatroom('secondNewChatroom');
+chatrooms.push(second);
+
+
+
 export default function Messages() {
   const [currentChatroom, setCurrentChatroom] = useState(chatrooms[0]);
   const [newMessage, setNewMessage] = useState('');
@@ -54,6 +71,19 @@ export default function Messages() {
     // Reset the new message input
     setNewMessage('');
   };
+
+  const createNewChatroom = (name) => {
+    const newChatroom = {
+      id: chatrooms.length +1,
+      name: name,
+      messages: [],
+
+    };
+    const updatedChatrooms = [...chatrooms,newChatroom];
+
+    setCurrentChatroom(newChatroom);
+    setChatrooms(updatedChatrooms);
+  }
 
   return (
     <div className="messages-container">
