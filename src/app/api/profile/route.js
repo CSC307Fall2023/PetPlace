@@ -6,61 +6,46 @@ export async function PUT(request) {
   const loggedInData = await checkLoggedIn();
   
   if (loggedInData.loggedIn) {
-    let { name, species, breed, age, vaccineStatus, neuterStatus, location, bio, profileImage } = await request.json();
-    if(age === '...'){
-      age = 0
-    }
-    else{
-      age = parseInt(age)
-    }
+    let photo = await request.json();
+    let one = photo[0]
     const existingPetProfile = await prisma.PetProfile.findFirst({
       where: { userId: loggedInData.user.id },
     });
     if(existingPetProfile) {
-      // Profile exists, update it
-      try {
-        const petInfo = await prisma.PetProfile.update({
-          where: {
-            petId: existingPetProfile.petId,
-          },
-          data: {
-            petName: name,
-            species: species,
-            breed: breed,
-            age: age,
-            vaxxed: vaccineStatus,
-            sprayedNeutered: neuterStatus,
-            //location: location, // Assuming this field is in your schema
-            bio: bio, // Assuming this field is in your schema
-            profileImage: profileImage, // Assuming this field is in your schema
-          },
-        });
-        return NextResponse.json(petInfo);
-      } catch (error) {
-        return NextResponse.json({ error: 'Error updating profile' }, { status: 500 });
+        const existingPhotoGal = await prisma.PetPhoto.findFirst({
+        where: { petProfileId: existingPetProfile.petId},
+      })
+      if(existingPhotoGal)
+      {
+        try {
+          const photogal = await prisma.PetPhoto.create({
+            data: {
+              imageUrl: one,
+              petProfileId: existingPetProfile.petId,
+              location: existingPetProfile.location
+            },
+          });
+          return NextResponse.json(photogal);
+        } catch (error) {
+          return NextResponse.json({ error: 'Error updating profile' }, { status: 500 });
+        }
       }
-    } else {
-      // Profile doesn't exist, create a new one
-      try {
-        const newPetProfile = await prisma.PetProfile.create({
-          data: {
-            petName: name,
-            species: species,
-            breed: breed,
-            age: age,
-            vaxxed: vaccineStatus,
-            sprayedNeutered: neuterStatus,
-            //location: location, // Assuming this field is in your schema
-            bio: bio, // Assuming this field is in your schema
-            profileImage: profileImage, // Assuming this field is in your schema
-            userId: loggedInData.user.id,
-          },
-        });
-        return NextResponse.json(newPetProfile);
-      } catch (error) {
-        return NextResponse.json({ error: 'Error creating profile' }, { status: 500 });
-      }
-    }    
+      else {
+        // Profile doesn't exist, create a new one
+        try {
+          const petphoto = await prisma.PetPhoto.create({
+            data: {
+              imageUrl: one,
+              petProfileId: existingPetProfile.petId,
+              location: existingPetProfile.location
+            },
+          });
+          return NextResponse.json(petphoto);
+        } catch (error) {
+          return NextResponse.json({ error: 'Error creating profile' }, { status: 500 });
+        }
+      }    
+    }  
   }
   
   return NextResponse.json({ error: 'Not signed in' }, { status: 403 });

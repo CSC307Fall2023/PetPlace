@@ -1,28 +1,37 @@
 'use client'
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState, useMemo} from 'react';
 import './style.css';
+import { MenuItem } from '@mui/material';
+import Link from 'next/link';
+
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [gallery, setGallery] = useState([]);
+  const [editedGallery, setEditedGallery] = useState([]);
 
-  const petInfo = {
-    name: '...',
+
+  //const [showUploadedImages, setShowUploadedImages] = useState(false);
+
+  const [petInfo, setPetInfo] = useState({
+    petName: '...',
     species: '...',
     breed: '...',
     age: '...',
-    vaccineStatus: '...',
-    neuterStatus: '...',
+    vaxxed: '...',
+    sprayedNeutered: '...',
     location: '...',
     bio: '...',
     profileImage: '/goated.jpg', // Example URL for the profile image
-  };
+  });
 
   const userInfo = {
+    profileImage: "/goated.jpg",
     name: "Your Name",
-    username: "Your username",
-    profileImage: "/goated.jpg"
+    username: "Your username"
   }
+
 
   const [editedPetInfo, setEditedPetInfo] = useState({ ...petInfo });
 
@@ -30,18 +39,19 @@ export default function Profile() {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  async function handleSaveClick () {
     // Save the edited pet info to the server
     // You can send a request to update the information here
     // Once the save is successful, set isEditing to false
     const updatedPetInfo = editedPetInfo
-
-    fetch(`api/profile`, {method: "put", body: JSON.stringify(updatedPetInfo)}).then((response) =>{
+    await fetch(`api/profile/petinfo`, {method: "put", body: JSON.stringify(updatedPetInfo)}).then((response) =>{
       if(response.ok){
-        console.log("It worked!")
+        console.log("It worked!");
+        setPetInfo({...editedPetInfo});
       }
     })
-    setIsEditing(false);
+    setIsEditing(false)
+
   };
 
   //Updates whatever section got updated. So if name got updated it will update name and if species got updated it updates species textbox
@@ -53,17 +63,101 @@ export default function Profile() {
     });
   };
 
+  //Adds a profile pic for the pet
   const handleImageChange = (e) => {
-    const imageFile = e.target.files[0]; 
-    if (imageFile) {
+
+    const images = Array.from(e.target.files);
+    const file = images[0];
+    const reader = new FileReader();
+    reader.onload = () => {
       setEditedPetInfo({
-        ...editedPetInfo, 
-        profileImage: URL.createObjectURL(imageFile), 
-        imageFile
-      })
-    }
+        ...editedPetInfo,
+        profileImage:  reader.result, file})
+    };
+    reader.readAsDataURL(file);
 
   }
+
+  //updates the EditedGallery with the image user provided.
+  const handleImageSelection = (e) => {
+    const images = Array.from(e.target.files);
+    const file = images[0];
+    const reader = new FileReader();
+    const ar = []
+    reader.onload = () => {
+      ar.push(reader.result)
+      setEditedGallery(ar)
+    };
+    reader.readAsDataURL(file);
+    // console.log(images)
+    // console.log(ar)
+  }; 
+
+  
+  //update display gallery and also save it in the backend
+  async function handleImageUpload () {
+    setGallery((prevGallery) => [...prevGallery, ...editedGallery]);
+    const imageUrls = editedGallery.map((image) => image);
+    await fetch(`api/profile`, {method: "put", body: JSON.stringify(imageUrls)}).then((response) =>{
+      if(response.ok){
+        console.log("It worked!")
+      }
+    })
+    setEditedGallery([])
+  }
+
+
+  useEffect(() => {
+    console.log("mount")
+    const fetchPetInfo = async () => {
+      try {
+        const response = await fetch(`api/profile/petinfo/getter`, {method: "get"})
+        if(response.ok){
+          const data = await response.json(); // Parse the JSON response
+          if(data.status === 'No Profile'){
+            setIsEditing(true)
+          }
+          else{
+            setEditedPetInfo(data);
+          }
+          //console.log(data)
+        }
+      } catch (error) {
+        console.error('Error fetching pet information:', error);
+      }
+    };
+    
+    const fetchpetGal = async () =>{
+      try {
+        const response2 = await fetch(`api/profile/galleryhome/getter`, {method: "get"})
+        if(response2.ok){
+          const data2 = await response2.json()
+          setGallery(data2)
+        }
+        
+      } catch(error){
+        console.error('Error fetching pet information:', error);
+      }
+    }
+
+    fetchPetInfo();
+    fetchpetGal()
+  }, []);
+
+  //memorize gallery to prevent from re rendering if gallery isn't updated.
+  const memorizedGallery = useMemo(() => (
+
+    gallery.map((image, index) => {
+      // console.log(image)
+      return (
+        <div key={index}>
+          <Image src={image} alt={`Gallery Image ${index}`} width={100} height={100} />
+        </div>
+      );
+      
+    })
+  ), [gallery]);
+
 
   return (
     <div className="profile-container">
@@ -76,20 +170,18 @@ export default function Profile() {
               <Image src={editedPetInfo.profileImage} alt="Profile Picture" width = {200} height ={200} />
             )}
           </div>
-
           <div className="profile-info">
             <h1 className="profile-name">
               {isEditing ? (
                 <input
                   type="text"
-                  name="name"
+                  name="petName"
                   placeholder = "Pet Name"
-                  value={editedPetInfo.name}
+                  value={editedPetInfo.petName}
                   onChange={handleInputChange}
                 />
               ) : (
-                
-                editedPetInfo.name
+                editedPetInfo.petName
               )}
             </h1>
 
@@ -109,7 +201,6 @@ export default function Profile() {
           </div>
 
         </div>
-
         <h2>Pet Info</h2>
         <ul className="pet-info-list">
           <li className="pet-info-item">
@@ -160,24 +251,24 @@ export default function Profile() {
             <strong>Vaccine Status:</strong>
             {isEditing ? (
               <select
-                name="vaccineStatus"
-                value={editedPetInfo.vaccineStatus}
+                name="vaxxed"
+                value={editedPetInfo.vaxxed}
                 onChange={handleInputChange}
               > 
                 <option value = "...">...</option>
-                <option value = "Up to Date">Up to date</option>
+                <option value = "Up to Date">Up to Date</option>
                 <option value = "Not up to Date">Not up to Date</option>
               </select>
             ) : (
-              editedPetInfo.vaccineStatus
+              editedPetInfo.vaxxed
             )}
           </li>
           <li className="pet-info-item">
             <strong>Neuter Status:</strong>
             {isEditing ? (
               <select
-                name="neuterStatus"
-                value={editedPetInfo.neuterStatus}
+                name="sprayedNeutered"
+                value={editedPetInfo.sprayedNeutered}
                 onChange={handleInputChange}
               > 
                 <option value = "...">...</option>
@@ -185,7 +276,7 @@ export default function Profile() {
                 <option value = "No">No</option>
               </select>
             ) : (
-              editedPetInfo.neuterStatus
+              editedPetInfo.sprayedNeutered
             )}
           </li>
           <li className="pet-info-item">
@@ -202,7 +293,24 @@ export default function Profile() {
             )}
           </li>
         </ul>
-
+        {!isEditing ? (
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              // multiple
+              onChange={handleImageSelection}
+            />
+            <button onClick={handleImageUpload}>+</button> 
+          </div>
+        ): null}
+        
+        {!isEditing && (
+          <div>
+            {memorizedGallery}
+          </div>
+        )}
+        
         {isEditing ? (
             <button onClick={handleSaveClick}>Save</button>
           ) : (
