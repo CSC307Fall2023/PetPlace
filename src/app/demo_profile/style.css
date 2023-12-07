@@ -14,6 +14,7 @@ body {
 }
 
 .additional-profile-image {
+<<<<<<< Updated upstream
   border: 5px solid #ff4500;
   border-radius: 10px;
   float: right; 
@@ -73,66 +74,61 @@ body {
   max-height: 500px; /* Try removing or adjusting this line */
   scale: 1;
 
+=======
+  margin-top: -300px;
+  margin-right: 50px;
+  float: right; 
+  border: 5px solid #ff4500;
+  border-radius: 10px;
+>>>>>>> Stashed changes
+}
+
+.profile-header {
+  align-items: center;
+}
+
+.profile-image img {
+  border-radius: 50%;
+  border: 4px solid #ff4500;
+  margin-left: 25px;
+  margin-top: 25px;
+}
+
+.profile-info {
+  margin-left: 250px;
+  margin-bottom: 100px;
+}
+
+.profile-name {
+  font-size: 1.5em;
+  margin: 0;
+  margin-top: -175px;
+  margin-bottom: 5px; /* Adjust this value as needed */
+}
+
+.profile-bio {
+  color: #777;
+  margin: 0; /* Remove margin-top and margin-bottom */
+  max-width: 300px;
 }
 
 
-/* Profile.css 
-.profile-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    text-align: left;
-  }
-  
-  .profile-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .profile-image {
-    border-radius: 50%;
-    margin-right: 20px;
-  }
-  
-  .profile-info {
-    flex-grow: 1;
-  }
-  
-  .profile-name {
-    font-size: 28px;
-    color: #333;
-    margin: 0;
-  }
-  
-  .profile-bio {
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .skill-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .skill-item {
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  .profile-link {
-    text-decoration: none;
-    color: #007bff;
-    display: inline-block;
-    margin-top: 5px;
-  }
-  
-  .photo-gallery {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  */
+
+.pet-info-list {
+  margin-left: 550px;
+  margin-top: -250px;
+}
+
+
+.photo-gallery {
+  margin-left: 60px;
+  flex-direction: column; /* Stack images vertically */
+  align-items: center; /* Center the images horizontally */
+}
+
+.photo-gallery img {
+  margin: 10px; /* Add margin between images if needed */
+  border-radius: 5px;
+  max-width: 500px;
+  max-height: 500px;
+}
