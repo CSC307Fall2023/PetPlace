@@ -166,7 +166,7 @@ export default function Profile() {
         <div className="profile-header">
           <div className="profile-image">
             {isEditing ? (
-              <input type="file" name="profileImage" accept="image/*" onChange={handleImageChange} />
+              <input type="file" name="profileImage" accept="image/*" onChange={handleImageChange} style = {{display: "block", width: 200 }} />
             ) : (
               <Image src={editedPetInfo.profileImage} alt="Profile Picture" width = {200} height ={200} />
             )}
@@ -301,6 +301,10 @@ export default function Profile() {
               accept="image/*"
               // multiple
               onChange={handleImageSelection}
+              style = {{display: "block", width: 200, mr: '20px', 
+              backgroundColor: '#3498db',/* Add a blue background color */
+              padding: '10px', /* Optional: Add padding for spacing between the image and the box */
+              borderRadius: '8px' /* Optional: Add border-radius for rounded corners */}}
             />
             <button onClick={handleImageUpload}>+</button> 
           </div>
