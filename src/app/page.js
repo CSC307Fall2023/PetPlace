@@ -109,8 +109,6 @@ export default function ToDos() {
         
         </Grid>
     })
-
-    console.log (curProfile)
     
     const cityGallery = isLoading ? loadingItems : galleries.filter((vals) => {
         return (vals.location === curProfile.location) })
@@ -134,15 +132,14 @@ export default function ToDos() {
     }
 
 
-    let arry = ["PE","TP","LA","CE","!!"];
-    let arry2 = [6,7,8,9,10];
-    let arry3 = [arry, arry2, arry];
+
     const [arryInd, setArryInd] = useState(0);
 
     debugger;
     const slider = isLoading ? loadingItems :  splitArr(cityGallery)[arryInd].map((val, idx) => {
+      let link = `/demo_profile/${val.petProfileId}`;
       return <Grid item xs = {2.4}>
-        <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href='/demo_profile'>
+        <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {val.imageUrl} alt = "photos" width = {290} height = {290}/>
             </Button>
       </Grid>
@@ -162,9 +159,6 @@ export default function ToDos() {
       }
     }
 
-    function getProfile(){
-
-    }
 
 
 
