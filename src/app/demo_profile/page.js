@@ -27,7 +27,7 @@ export default function Profile() {
   });
 
   const [userInfo, setUserInfo] = useState({
-    profileImage: "/goated.jpg",
+    userImage: "/goated.jpg",
     name: "Your Name",
     username: "Your username"
   })
@@ -46,7 +46,7 @@ export default function Profile() {
     const updatedPetInfo = editedPetInfo
     const updatedUserInfo = userInfo
 
-    await fetch(`api/profile/userinfo/update`, {method: "put", body: JSON.stringify(updatedUserInfo)}).then((response) =>{
+    await fetch(`api/profile/userinfo/update`, {method: "put", body: JSON.stringify({profileImage: updatedUserInfo.userImage})}).then((response) =>{
       if(response.ok){
         console.log("It worked!");
         setUserInfo({...userInfo});
@@ -103,7 +103,7 @@ export default function Profile() {
     reader.onload = () => {
       setUserInfo({
         ...userInfo,
-        profileImage:  reader.result, file})
+        userImage:  reader.result, file})
     };
     reader.readAsDataURL(file);
 
@@ -163,12 +163,12 @@ export default function Profile() {
         const response = await fetch(`api/profile/userinfo`, {method: "get"})
         if(response.ok){
           const data = await response.json(); // Parse the JSON response
-          const updatedUserInfo = {
-            ...userInfo,
-            ...data,
-            profileImage: data.profileImage || userInfo.profileImage,
-          };
-          setUserInfo(updatedUserInfo)
+          // const updatedUserInfo = {
+          //   ...userInfo,
+          //   ...data,
+          //   profileImage: data.profileImage || userInfo.profileImage,
+          // };
+          setUserInfo(data)
         }
       } catch (error) {
         console.error('Error fetching pet information:', error);
@@ -214,7 +214,8 @@ export default function Profile() {
         <div className="profile-header">
           <div className="profile-image">
             {isEditing ? (
-              <input type="file" name="profileImage" accept="image/*" onChange={handleImageChange} />
+              <input type="file" name="profileImage" accept="image/*" onChange={handleImageChange} style = {{display: "block", width: 200}}
+              />
             ) : (
               <Image src={editedPetInfo.profileImage} alt="Profile Picture" width = {200} height ={200} />
             )}
@@ -349,6 +350,7 @@ export default function Profile() {
               accept="image/*"
               // multiple
               onChange={handleImageSelection}
+              style = {{display: "block", width: 200}}
             />
             <button onClick={handleImageUpload}>+</button> 
           </div>
@@ -369,9 +371,10 @@ export default function Profile() {
       <div className = "userContainer">
         <div className="profile-image"> 
           {isEditing ? (
-                <input type="file" name="profileImage" accept="image/*" onChange={handleUserImageChange} />
+                <input type="file" name="profileImage" accept="image/*" onChange={handleUserImageChange} style = {{display: "block", width: 200}}
+                />
               ) : (
-                <Image src={userInfo.profileImage} alt="Profile Picture" width = {200} height ={200} />
+                <Image src={userInfo.userImage} alt="Profile Picture" width = {200} height ={200} />
               )}
         </div>
         <div className="user-info">

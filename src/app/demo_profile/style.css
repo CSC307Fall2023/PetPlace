@@ -103,6 +103,7 @@ input[type="file"] {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .profile-header {

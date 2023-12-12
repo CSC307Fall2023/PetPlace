@@ -16,7 +16,7 @@ export async function PUT(request) {
       try {
         const petInfo = await prisma.User.update({
           where: {
-            id: loggedInData.user.id,
+            id: existingPetProfile.id,
           },
           data: {
             userImage: profileImage
