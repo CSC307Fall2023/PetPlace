@@ -26,11 +26,11 @@ export default function Profile() {
     profileImage: '/goated.jpg', // Example URL for the profile image
   });
 
-  const userInfo = {
+  const [userInfo, setUserInfo] = useState({
     profileImage: "/goated.jpg",
     name: "Your Name",
     username: "Your username"
-  }
+  })
 
 
   const [editedPetInfo, setEditedPetInfo] = useState({ ...petInfo });
@@ -44,6 +44,14 @@ export default function Profile() {
     // You can send a request to update the information here
     // Once the save is successful, set isEditing to false
     const updatedPetInfo = editedPetInfo
+    const updatedUserInfo = userInfo
+
+    await fetch(`api/profile/userinfo/update`, {method: "put", body: JSON.stringify(updatedUserInfo)}).then((response) =>{
+      if(response.ok){
+        console.log("It worked!");
+        setUserInfo({...userInfo});
+      }
+    })
 
     await fetch(`api/profile/petinfo`, {method: "put", body: JSON.stringify(updatedPetInfo)}).then((response) =>{
       if(response.ok){
@@ -64,6 +72,14 @@ export default function Profile() {
     });
   };
 
+  const handleUserInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserInfo({
+      ...userInfo,
+      [name]: value,
+    });
+  };
+
   //Adds a profile pic for the pet
   const handleImageChange = (e) => {
 
@@ -73,6 +89,20 @@ export default function Profile() {
     reader.onload = () => {
       setEditedPetInfo({
         ...editedPetInfo,
+        profileImage:  reader.result, file})
+    };
+    reader.readAsDataURL(file);
+
+  }
+
+  const handleUserImageChange = (e) => {
+
+    const images = Array.from(e.target.files);
+    const file = images[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUserInfo({
+        ...userInfo,
         profileImage:  reader.result, file})
     };
     reader.readAsDataURL(file);
@@ -110,6 +140,7 @@ export default function Profile() {
 
   useEffect(() => {
     console.log("mount")
+
     const fetchPetInfo = async () => {
       try {
         const response = await fetch(`api/profile/petinfo/getter`, {method: "get"})
@@ -121,7 +152,23 @@ export default function Profile() {
           else{
             setEditedPetInfo(data);
           }
-          //console.log(data)
+        }
+      } catch (error) {
+        console.error('Error fetching pet information:', error);
+      }
+    };
+
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch(`api/profile/userinfo`, {method: "get"})
+        if(response.ok){
+          const data = await response.json(); // Parse the JSON response
+          const updatedUserInfo = {
+            ...userInfo,
+            ...data,
+            profileImage: data.profileImage || userInfo.profileImage,
+          };
+          setUserInfo(updatedUserInfo)
         }
       } catch (error) {
         console.error('Error fetching pet information:', error);
@@ -142,7 +189,8 @@ export default function Profile() {
     }
 
     fetchPetInfo();
-    fetchpetGal()
+    fetchUserInfo();
+    fetchpetGal();
   }, []);
 
   //memorize gallery to prevent from re rendering if gallery isn't updated.
@@ -319,7 +367,31 @@ export default function Profile() {
           )} 
       </div>
       <div className = "userContainer">
-        <p>userinfo</p>
+        <div className="profile-image"> 
+          {isEditing ? (
+                <input type="file" name="profileImage" accept="image/*" onChange={handleUserImageChange} />
+              ) : (
+                <Image src={userInfo.profileImage} alt="Profile Picture" width = {200} height ={200} />
+              )}
+        </div>
+        <div className="user-info">
+          <h1 className="user-name">
+            {isEditing ? (
+              <input
+                type="text"
+                name="name"
+                placeholder = "Enter your name..."
+                value={userInfo.name}
+                onChange={handleUserInputChange}
+              />
+            ) : (
+              userInfo.name
+            )}
+          </h1>
+          <h2 className="user-username">
+                {userInfo.username}
+          </h2>
+        </div>
       </div>
     </div>
   );
