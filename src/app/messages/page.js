@@ -1,112 +1,78 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import './style.css';
-
-const chatrooms = [
-  {
-    id: 1,
-    name: 'General',
-    messages: [
-      { sender: 'MrMod', content: 'Reminder to keep memes out of #general' },
-      { sender: 'morbo', content: 'you cant stop me' },
-    ],
-  },
-  {
-    id: 2,
-    name: 'CatLovers',
-    messages: [
-      { sender: 'Orangeball', content: 'Anyone here?' },
-      { sender: 'Cheshire', content: 'Plotting the demise of DogLovers' },
-    ],
-  },
-  // Add more chatrooms as needed
-  {
-    id: 3,
-    name: 'Stickbug',
-    messages: [
-      { sender: 'Buford', content: 'stickbug' },
-      { sender: 'morbo', content: 'stickbug' },
-      { sender: 'beanboy', content: 'why was I added to this chat' },
-    ],
-  },
-];
-
-function createChatroom(name) {
-  const newChatroom = {
-    id: chatrooms.length +1, // You might want to ensure unique IDs
-    name: name,
-    messages: [],
-  };
-
-  return newChatroom;
-}
-
-const newChatroom = createChatroom('NewChatroom');
-chatrooms.push(newChatroom);
-const second = createChatroom('secondNewChatroom');
-chatrooms.push(second);
 
 
 
 export default function Messages() {
-  const [currentChatroom, setCurrentChatroom] = useState(chatrooms[0]);
+  const [chatRooms, setChatRooms] = useState([]);
+  const [curChatRoom, setCurChatRoom] = useState('');
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [curUser, setCurUser] = useState('');
 
   useEffect(() => {
-    // Check if the code is running on the client
-    if (typeof window !== 'undefined') {
-      // Define client-specific logic here
-    }
+    fetch(`/api/profile/messages`, {method: "get"}).then((response) => response.json()).then((chats) => {
+        return fetch(`/api/profile/userinfo`, {method: "get"}).then((res) =>res.json()).then((user) => {
+            setChatRooms(chats);
+            setCurUser(user);
+            setCurChatRoom(chats[0])
+            if (chats[0])
+            {
+                let curid = chats[0].chatRoomId
+                let link1 = `/api/profile/messages/message/${curid}`
+                return fetch(link1 , {method: "get"}).then((resp) => {return resp.json().then((mes) =>{
+                    setMessages(mes);
+             })})
+            }})
+      });
   }, []);
 
-  const handleChatroomSwitch = (chatroom) => {
-    setCurrentChatroom(chatroom);
+
+
+  async function handleChatroomSwitch(chatroom) {
+    setCurChatRoom(chatroom);
+    let curid = chatroom.chatRoomId
+    let link1 = `/api/profile/messages/message/${curid}`
+    await fetch(link1 , {method: "get"}).then((resp) => {return resp.json().then((mes) =>{
+        setMessages(mes);
+    })
+  })};
+
+  function handleSendMessage(){
+    fetch(`/api/profile/messages/message`, {method: "post", body: JSON.stringify({roomId: curChatRoom.chatRoomId ,send: curUser.username, cont: newMessage})}).then((res) => {return res.json().then((message) => {
+        return fetch(`/api/profile/messages`, {method: "put", body: JSON.stringify({mess: [...messages, message] ,utwoId: curChatRoom.usertwoId })}).then((respo) => {return respo.json().then((outp) => {
+            console.log('it WOOOORKS')
+            setMessages([...messages, message])
+            setNewMessage('');
+            
+        })})
+    })})
   };
 
-  const handleSendMessage = () => {
-    // Simulate sending a message
-    const updatedMessages = [...currentChatroom.messages, { sender: 'User', content: newMessage }];
-    setCurrentChatroom({ ...currentChatroom, messages: updatedMessages });
-
-    // Reset the new message input
-    setNewMessage('');
-  };
-
-  const createNewChatroom = (name) => {
-    const newChatroom = {
-      id: chatrooms.length +1,
-      name: name,
-      messages: [],
-
-    };
-    const updatedChatrooms = [...chatrooms,newChatroom];
-
-    setCurrentChatroom(newChatroom);
-    setChatrooms(updatedChatrooms);
-  }
 
   return (
     <div className="messages-container">
       {/* Chatrooms Panel */}
       <div className="chatrooms-panel">
         <div className="chatroom-switcher">
-          {chatrooms.map((chatroom) => (
+          {chatRooms.map((chatroom) => (
             <div
-              key={chatroom.id}
-              className={`chatroom-circle ${chatroom.id === currentChatroom.id ? 'active' : ''}`}
+              key={chatroom.chatRoomId}
+              className={`chatroom-circle ${chatroom.chatRoomId === curChatRoom.chatRoomId ? 'active' : ''}` }
               onClick={() => handleChatroomSwitch(chatroom)}
             />
           ))}
         </div>
         <ul className="chatroom-list">
-          {chatrooms.map((chatroom) => (
+          {chatRooms.map((chatroom) => (
             <li
-              key={chatroom.id}
-              className={`chatroom-item ${chatroom.id === currentChatroom.id ? 'active' : ''}`}
+              key={chatroom.chatRoomId}
+              className={`chatroom-item ${chatroom.chatRoomId === curChatRoom.chatRoomId ? 'active' : ''}`}
               onClick={() => handleChatroomSwitch(chatroom)}
             >
-              <p className="chatroom-name">{chatroom.name}</p>
-              <p className="last-message">{chatroom.messages.length > 0 ? chatroom.messages.slice(-1)[0].content : ''}</p>
+              <p className="chatroom-name">{chatroom.usertwo === curUser.username ? chatroom.userone : chatroom.usertwo}</p>
+              <p className="last-message">{messages.length > 0 ? messages.slice(-1)[0].content : ''}</p>
             </li>
           ))}
         </ul>
@@ -115,11 +81,11 @@ export default function Messages() {
       {/* Current Chatroom */}
       <div className="chatroom">
         <div className="chatroom-header">
-          <h1 className="chatroom-title">{currentChatroom.name}</h1>
+          <h1 className="chatroom-title">{(curChatRoom) ? curChatRoom.usertwo === curUser.username ? curChatRoom.userone : curChatRoom.usertwo : ''}</h1>
         </div>
         <div className="chatroom-messages">
-          {currentChatroom.messages.map((message, index) => (
-            <div key={index} className={`message ${message.sender === 'User' ? 'my-message' : 'other-message'}`}>
+          {messages.map((message, index) => (
+            <div key={index} className={`message ${message.sender === curUser.username ? 'my-message' : 'other-message'}`}>
               <p className="message-sender">{message.sender}</p>
               <p className="message-content">{message.content}</p>
             </div>

@@ -2,12 +2,13 @@
 import Image from 'next/image';
 import { useEffect, useState, useMemo} from 'react';
 import '../style.css';
-import { MenuItem } from '@mui/material';
+import { Button, MenuItem } from '@mui/material';
 import Link from 'next/link';
 
 
 export default function otherProfile({params}) {
   const [gallery, setGallery] = useState([]);
+  const [curUser, setCurUser] = useState([])
   const idPhoto = parseInt(params.id);
   console.log(idPhoto)
   //const [showUploadedImages, setShowUploadedImages] = useState(false);
@@ -49,7 +50,20 @@ export default function otherProfile({params}) {
           }
           else{
             setEditedPetInfo(data);
+            let uid = data.userId
+            let link2 = `/api/users/${uid}`
+            const newres = await fetch (link2, {method: "get"})
+            if (newres.ok)
+            {
+              const newuser = await newres.json();
+              if(newuser)
+              {
+                setCurUser(newuser)
+              }
+            }
           }
+
+          
           //console.log(data)
         }
       } catch (error) {
@@ -74,6 +88,14 @@ export default function otherProfile({params}) {
     fetchpetGal()
   }, []);
 
+  function createChatroom(){
+    fetch("/api/profile/messages", {method: "post", body: JSON.stringify({name: curUser.username, nameid: curUser.id})}).then((res) => {
+      return res.json().then((outp) => {
+          window.location.href = '/messages'
+      })})
+
+  }
+
   //memorize gallery to prevent from re rendering if gallery isn't updated.
   const memorizedGallery = useMemo(() => (
 
@@ -93,6 +115,7 @@ export default function otherProfile({params}) {
     <div className="profile-container">
       <div className = "pet-container">
         <div className="profile-header">
+          
           <div className="profile-image">
               <Image src={editedPetInfo.profileImage} alt="Profile Picture" width = {200} height ={200} />
           </div>
@@ -103,6 +126,9 @@ export default function otherProfile({params}) {
             <p className="profile-bio">
                 {editedPetInfo.bio}
             </p>
+          </div>
+          <div className="message">
+            <Button className= "message-button"onClick={createChatroom} sx = {{ml: 150, border: '5px solid #000', borderColor: 'primary.main', color: 'light blue'}} >Message</Button>
           </div>
 
         </div>

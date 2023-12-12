@@ -58,8 +58,6 @@ const profiles = [
   },
 ];
 
-
-
 export default function SearchPage() {
   const [searchInput, setSearchInput] = React.useState('');
   const [profileList, setProfileList] = useState([]);
@@ -105,7 +103,7 @@ export default function SearchPage() {
       </div>
       <div className="profile-list">
         {filteredProfiles.map((profile) => (
-          <Link key={profile.id} href="/profile/[id]" as={`/profile/${profile.id}`}>
+          <Link key={profile.petId} href={`/demo_profile/${profile.PetId}`} as={`/demo_profile/${profile.petId}`}>
             <div className="profile-card clickable">
               <div className="profile-image">
                 {/* Use the 'image' property from the profile */}

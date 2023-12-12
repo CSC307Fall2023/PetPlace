@@ -18,6 +18,7 @@ model User {
   password     String
   petprofile   PetProfile?
   locationinfo LocationInfo?
+  chatroom     ChatRoom?
 }
 
 model PetProfile {
@@ -42,6 +43,24 @@ model PetPhoto {
   imageUrl     String
   petProfileId Int
   petProfile   PetProfile @relation(fields: [petProfileId], references: [petId])
+}
+
+model ChatRoom {
+  chatRoomId   Int        @id @default(autoincrement())
+  userone      String
+  useroneId    Int        @unique
+  user         User       @relation(fields: [useroneId], references: [id])
+  usertwo      String
+  usertwoId    Int
+  messages     Messages[]
+}
+
+model Messages {
+  messageId    Int        @id @default(autoincrement())
+  messageRoomId Int
+  chatRoom     ChatRoom   @relation(fields: [messageRoomId], references: [chatRoomId])
+  sender       String
+  content      String
 }
 
 model LocationInfo {
