@@ -350,7 +350,10 @@ export default function Profile() {
               accept="image/*"
               // multiple
               onChange={handleImageSelection}
-              style = {{display: "block", width: 200}}
+              style = {{display: "block", width: 200, backgroundColor: '#3498db',/* Add a blue background color */
+              padding: '10px', /* Optional: Add padding for spacing between the image and the box */
+              borderRadius: '8px', /* Optional: Add border-radius for rounded corners */
+              color: 'white'}}
             />
             <button onClick={handleImageUpload}>+</button> 
           </div>

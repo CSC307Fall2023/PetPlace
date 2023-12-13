@@ -89,8 +89,8 @@ export default function otherProfile({params}) {
     fetchpetGal()
   }, []);
 
-  function createChatroom(){
-    fetch("/api/profile/messages", {method: "post", body: JSON.stringify({name: curUser.username, nameid: curUser.id})}).then((res) => {
+  async function createChatroom(){
+    await fetch(`/api/profile/messages`, {method: "post", body: JSON.stringify({name: curUser.username, nameid: curUser.id})}).then((res) => {
       return res.json().then((outp) => {
           window.location.href = '/messages'
       })})

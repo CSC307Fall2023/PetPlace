@@ -135,7 +135,6 @@ export default function ToDos() {
 
     const [arryInd, setArryInd] = useState(0);
 
-    debugger;
     const slider = isLoading ? loadingItems :  splitArr(cityGallery)[arryInd].map((val, idx) => {
       let link = `/demo_profile/${val.petProfileId}`;
       return <Grid item xs = {2.4}>

@@ -103,11 +103,11 @@ export default function SearchPage() {
       </div>
       <div className="profile-list">
         {filteredProfiles.map((profile) => (
-          <Link key={profile.petId} href={`/demo_profile/${profile.PetId}`} as={`/demo_profile/${profile.petId}`}>
+          <Link key={profile.petId} href={`/demo_profile/${profile.petId}`} as={`/demo_profile/${profile.petId}`}>
             <div className="profile-card clickable">
               <div className="profile-image">
                 {/* Use the 'image' property from the profile */}
-                <Image src={`/${profile.image}`} alt="Profile Picture" width={200} height={200} />
+                <Image src={profile.profileImage} alt="Profile Picture" width={200} height={200} />
               </div>
               <div className="profile-details">
                 <h2 className="profile-name">{profile.petName}</h2>
