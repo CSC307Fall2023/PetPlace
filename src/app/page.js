@@ -49,6 +49,7 @@ export default function ToDos() {
       profileImage: '/goated.jpg', // Example URL for the profile image
     });
 
+
     // useEffect(() => {
     //     fetch("/api/profile/galleryhome", { method: "get" })
     //       .then((response) => response.ok && response.json())
@@ -126,7 +127,7 @@ export default function ToDos() {
         const resu = [];
         if (array.length === 0)
         {
-            return [[]];
+            return [[1]];
         }
         else
         {
