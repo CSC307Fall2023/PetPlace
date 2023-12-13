@@ -101,7 +101,15 @@ export default function ToDos() {
     const loadingItems = <CircularProgress/>;
     
     const toDoItems = isLoading ? loadingItems : galleries.map((photo, idx) => {
-        let link = `/demo_profile/${photo.petProfileId}`;
+      let link;
+        if (photo.petProfileId === curProfile.petId)
+        {
+          link = `/demo_profile`;
+        }
+        else
+        {
+          link = `/demo_profile/${photo.petProfileId}`;
+        }
         return <Grid item xs = {2.4} >  
             <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>
@@ -136,7 +144,15 @@ export default function ToDos() {
     const [arryInd, setArryInd] = useState(0);
 
     const slider = isLoading ? loadingItems :  splitArr(cityGallery)[arryInd].map((val, idx) => {
-      let link = `/demo_profile/${val.petProfileId}`;
+      let link;
+      if (val.petProfileId === curProfile.petId)
+      {
+        link = `/demo_profile`;
+      }
+      else
+      {
+        link = `/demo_profile/${val.petProfileId}`;
+      }
       return <Grid item xs = {2.4}>
         <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {val.imageUrl} alt = "photos" width = {290} height = {290}/>
