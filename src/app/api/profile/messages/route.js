@@ -21,6 +21,10 @@ export async function GET(request) {
         {
             return NextResponse.json(getchat)
         }
+        else
+        {
+            return NextResponse.json([])
+        }
     }
     else{
       return NextResponse.json({status: "No user found"})
