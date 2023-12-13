@@ -161,14 +161,14 @@ export default function ToDos() {
     })
 
     function sliderInc (){
-      if (arryInd >= 0 && arryInd < splitArray.length - 1 )
+      if (arryInd >= 0 && arryInd < splitArr(cityGallery).length - 1 )
       {
         setArryInd(arryInd + 1);
       }
     }
 
     function sliderDec (){
-      if (arryInd > 0 && arryInd <= splitArray.length - 1)
+      if (arryInd > 0 && arryInd <= splitArr(cityGallery).length - 1)
       {
         setArryInd(arryInd - 1)
       }
@@ -180,7 +180,7 @@ export default function ToDos() {
     return (
         <>
          {/* <li> link: <a href="/demo_profile"> demo profile page</a>   </li> */}
-            <h2><center>Explore</center></h2>
+            <h2><center>Explore Your Area</center></h2>
             <center><Box sx = {{flexgrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
               <Grid container justifyContent = "center" alignItems = "center" rowSpacing = {1} >
                 {slider}
@@ -190,7 +190,7 @@ export default function ToDos() {
               </Grid>
             </Box></center>
 
-            
+            <h2><center>Explore All</center></h2>
             <center><Box sx = {{ flexgrow: 1}}>
               <Grid container rowSpacing = {1} >
                 {toDoItems}
