@@ -25,11 +25,11 @@ export default function otherProfile({params}) {
     profileImage: '/goated.jpg', // Example URL for the profile image
   });
 
-  const userInfo = {
-    profileImage: "/goated.jpg",
+  const [userInfo, setUserInfo] = useState({
+    userImage: "/goated.jpg",
     name: "Your Name",
     username: "Your username"
-  }
+  })
 
 
   const [editedPetInfo, setEditedPetInfo] = useState({ ...petInfo });
@@ -59,6 +59,7 @@ export default function otherProfile({params}) {
               if(newuser)
               {
                 setCurUser(newuser)
+                setUserInfo(newuser)
               }
             }
           }
@@ -128,7 +129,12 @@ export default function otherProfile({params}) {
             </p>
           </div>
           <div className="message">
-            <Button className= "message-button"onClick={createChatroom} sx = {{ml: 150, border: '5px solid #000', borderColor: 'primary.main', color: 'light blue'}} >Message</Button>
+            <Button className= "message-button"onClick={createChatroom} style = {{ display: 'block', marginLeft: '1075px', 
+              backgroundColor: '#3498db',/* Add a blue background color */
+              padding: '10px', /* Optional: Add padding for spacing between the image and the box */
+              borderRadius: '8px', /* Optional: Add border-radius for rounded corners */
+              
+              color: 'white'}} >Message</Button>
           </div>
 
         </div>
@@ -164,7 +170,17 @@ export default function otherProfile({params}) {
         </div>
       </div>
       <div className = "userContainer">
-        <p>userinfo</p>
+        <div className="profile-image">          
+          <Image src={userInfo.userImage} alt="Profile Picture" width = {200} height ={200} />           
+        </div>
+        <div className="user-info">
+          <h1 className="user-name">  
+              {userInfo.name}
+          </h1>
+          <h2 className="user-username">
+                {userInfo.username}
+          </h2>
+        </div>
       </div>
     </div>
   );

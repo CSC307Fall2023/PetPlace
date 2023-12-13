@@ -4,7 +4,7 @@ import { checkLoggedIn } from "@/lib/auth";
 
 export async function PUT(request) {
   const loggedInData = await checkLoggedIn();
-  
+
   if (loggedInData.loggedIn) {
     let photo = await request.json();
     let one = photo[0]
@@ -35,7 +35,8 @@ export async function PUT(request) {
         try {
           const petphoto = await prisma.PetPhoto.create({
             data: {
-              imageUrl: one,
+             imageUrl: one,
+              // imageUrl: "test",
               petProfileId: existingPetProfile.petId,
               location: existingPetProfile.location
             },
@@ -44,9 +45,9 @@ export async function PUT(request) {
         } catch (error) {
           return NextResponse.json({ error: 'Error creating profile' }, { status: 500 });
         }
-      }    
-    }  
+      }
+    }
   }
-  
+
   return NextResponse.json({ error: 'Not signed in' }, { status: 403 });
 }
