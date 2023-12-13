@@ -126,7 +126,7 @@ export default function ToDos() {
         const resu = [];
         if (array.length === 0)
         {
-            return [[1]];
+            return [[]];
         }
         else
         {
