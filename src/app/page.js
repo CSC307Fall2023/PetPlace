@@ -64,7 +64,10 @@ export default function ToDos() {
         console.log("mount")
         fetch(`api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
           return fetch("/api/profile/galleryhome", { method: "get" }).then(res => res.json()).then((gallery) => {
-            setCurProfile(profile);
+            if(profile.status !== 'No Profile')
+            {
+              setCurProfile(profile);
+            }
             setGalleries(gallery);
             setIsLoading(false);
           });
@@ -111,7 +114,7 @@ export default function ToDos() {
         {
           link = `/demo_profile/${photo.petProfileId}`;
         }
-        return <Grid item xs = {2.4} >  
+        return <Grid item xs = {2.4} sm = {2.4} md = {2.4} lg = {2.4} xl = {2.4}>  
             <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {photo.imageUrl} alt = "photos" width = {290} height = {290}/>
             </Button>
@@ -154,7 +157,7 @@ export default function ToDos() {
       {
         link = `/demo_profile/${val.petProfileId}`;
       }
-      return <Grid item xs = {2.4}>
+      return <Grid item xs = {2.4} sm = {2.4} md = {2.4} lg = {2.4} xl = {2.4}>
         <Button sx ={{border: '5px solid #000' ,width: 300, height: 300 }} component = {Link} href={link}>
                 <Image src = {val.imageUrl} alt = "photos" width = {290} height = {290}/>
             </Button>
