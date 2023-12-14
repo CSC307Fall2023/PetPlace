@@ -121,11 +121,15 @@ export default function Profile() {
 
   return (
     <div className="main-container">
+<<<<<<< Updated upstream
       <div className="top-bar">
         {/* Place your logo or title in the top bar */}
       </div>
 
       <div className="profile-container">
+=======
+      <div className = "profile-container">
+>>>>>>> Stashed changes
         <div className="profile-header">
           <div className="profile-image">
             {isEditing ? (
@@ -163,11 +167,108 @@ export default function Profile() {
               )}
             </p>
 
+<<<<<<< Updated upstream
+=======
+          </div>
+
+        </div>
+        <h2>Pet Info</h2>
+        <ul className="pet-info-list">
+          <li className="pet-info-item">
+            <strong>Species:</strong>
+            {isEditing ? (
+              <input
+                type="text"
+                name="species"
+                placeholder = "Dog/Cat ..."
+
+                value={editedPetInfo.species}
+                onChange={handleInputChange}
+              />
+            ) : (
+              editedPetInfo.species
+            )}
+          <strong>  Breed:</strong>
+          {isEditing ? (
+              <input
+                type="text"
+                name="breed"
+                placeholder = "Labrador Retriever ..."
+                value={editedPetInfo.breed}
+                onChange={handleInputChange}
+              />
+            ) : (
+              editedPetInfo.breed
+            )}
+
+
+          </li>
+
+          <li className="pet-info-item">
+            <strong>Age:</strong>
+            {isEditing ? (
+              <input
+                type="number"
+                name="age"
+                placeholder = "Age of your pet ..."
+                value={editedPetInfo.age}
+                onChange={handleInputChange}
+                min="0"
+              />
+            ) : (
+              editedPetInfo.age
+            )}
+
+              <strong> Location:</strong>
+            {isEditing ? (
+              <input 
+              type="text" 
+              name="location"
+              placeholder = "State, City"
+              value={editedPetInfo.location}
+              onChange={handleInputChange} />
+            ) : (
+              editedPetInfo.location
+            )}
+          </li>
+          <li className="pet-info-item">
+            <strong>Vaccine Status:</strong>
+>>>>>>> Stashed changes
             {isEditing ? (
               <button onClick={handleSaveClick}>Save</button>
             ) : (
               <button onClick={handleEditClick}>Edit</button>
             )}
+<<<<<<< Updated upstream
+=======
+
+            <strong>  Neuter Status:</strong>
+            {isEditing ? (
+              <select
+                name="sprayedNeutered"
+                value={editedPetInfo.sprayedNeutered}
+                onChange={handleInputChange}
+              > 
+                <option value = "...">...</option>
+                <option value = "Yes">Yes</option>
+                <option value = "No">No</option>
+              </select>
+            ) : (
+              editedPetInfo.sprayedNeutered
+            )}
+          </li>
+       
+        </ul>
+        {!isEditing ? (
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              // multiple
+              onChange={handleImageSelection}
+            />
+            <button onClick={handleImageUpload}>+</button> 
+>>>>>>> Stashed changes
           </div>
 
           <div className="pet-info-container">
@@ -260,6 +361,7 @@ export default function Profile() {
           </div>
         </div>
       </div>
+<<<<<<< Updated upstream
       <div className="image-gallery">
               <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
           {itemData.map((item) => (
@@ -274,6 +376,11 @@ export default function Profile() {
           ))}
         </ImageList>
       </div>
+=======
+      
+     
+      
+>>>>>>> Stashed changes
     </div>
   );
 }
