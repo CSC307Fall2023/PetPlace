@@ -62,7 +62,7 @@ export default function ToDos() {
 
       useEffect(() => {
         console.log("mount")
-        fetch(`api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
+        fetch(`/api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
           return fetch("/api/profile/galleryhome", { method: "get" }).then(res => res.json()).then((gallery) => {
             if(profile !== '')
             {
@@ -130,7 +130,7 @@ export default function ToDos() {
         const resu = [];
         if (array.length === 0)
         {
-            return [[1]];
+            return [[]];
         }
         else
         {
@@ -184,13 +184,16 @@ export default function ToDos() {
     return (
         <>
          {/* <li> link: <a href="/demo_profile"> demo profile page</a>   </li> */}
-            <h2><center>Explore Your Area</center></h2>
+            <h2><center>{!isLoading && <ListItem key="leftArrow" secondaryAction={<IconButton sx={{position: 'relative', right: '1720px', top: '100px'}} onClick={sliderDec}><ArrowBackIosIcon sx={{color: 'black'}} /></IconButton>}>
+                        </ListItem>}
+                        Explore Your Area 
+                        {!isLoading && <ListItem key="rightrrow" secondaryAction={<IconButton sx={{position: 'relative',left: '40px', top: '50px'}} onClick={sliderInc}><ArrowForwardIosIcon sx={{color: 'black'}} /></IconButton>}>
+                        </ListItem>} 
+                  </center></h2>
             <center><Box sx = {{flexgrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
               <Grid container justifyContent = "center" alignItems = "center" rowSpacing = {1} >
                 {slider}
-                {!isLoading && <ListItem key="leftArrow" secondaryAction={<IconButton sx={{mr: 213, mb: 45}} onClick={sliderDec}><ArrowBackIosIcon sx={{color: 'black'}} /></IconButton>}></ListItem> }
-                {!isLoading && <ListItem key="rightrrow" secondaryAction={<IconButton sx={{mr: -3.3, mb: 45}} onClick={sliderInc}><ArrowForwardIosIcon sx={{color: 'black'}} /></IconButton>}>
-                  </ListItem>}  
+                 
               </Grid>
             </Box></center>
 
