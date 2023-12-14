@@ -39,12 +39,12 @@ export default function Messages() {
     })
   })};
 
-  function handleSendMessage(){
-    fetch(`/api/profile/messages/message`, {method: "post", body: JSON.stringify({roomId: curChatRoom.chatRoomId ,send: curUser.username, cont: newMessage})}).then((res) => {return res.json().then((message) => {
+  async function handleSendMessage(){
+    await fetch(`/api/profile/messages/message`, {method: "post", body: JSON.stringify({roomId: curChatRoom.chatRoomId ,send: curUser.username, cont: newMessage})}).then((res) => {return res.json().then((message) => {
         return fetch(`/api/profile/messages`, {method: "put", body: JSON.stringify({mess: [...messages, message] ,utwoId: curChatRoom.usertwoId })}).then((respo) => {return respo.json().then((outp) => {
             console.log('it WOOOORKS')
             setMessages([...messages, message])
-            setNewMessage('');
+            setNewMessage('');  
             
         })})
     })})
