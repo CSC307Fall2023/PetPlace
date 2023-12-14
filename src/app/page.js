@@ -62,7 +62,7 @@ export default function ToDos() {
 
       useEffect(() => {
         console.log("mount")
-        fetch(`/api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
+        fetch("/api/profile/petinfo/getter", {method: "get"}).then((response) => response.json()).then((profile) => {
           return fetch("/api/profile/galleryhome", { method: "get" }).then(res => res.json()).then((gallery) => {
             if(profile !== '')
             {
