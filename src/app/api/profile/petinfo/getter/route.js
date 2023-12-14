@@ -13,7 +13,7 @@ export async function GET(request) {
         return NextResponse.json(getinfo);
     }
     else{
-      return NextResponse.json({status: "No Profile"})
+      return NextResponse.json('')
     }
   }
   return NextResponse.json({error: 'not signed in'}, {status: 403});

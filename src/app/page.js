@@ -64,7 +64,7 @@ export default function ToDos() {
         console.log("mount")
         fetch(`api/profile/petinfo/getter`, {method: "get"}).then((response) => response.json()).then((profile) => {
           return fetch("/api/profile/galleryhome", { method: "get" }).then(res => res.json()).then((gallery) => {
-            if(profile.status !== 'No Profile')
+            if(profile !== '')
             {
               setCurProfile(profile);
             }

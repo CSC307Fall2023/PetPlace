@@ -146,7 +146,7 @@ export default function Profile() {
         const response = await fetch(`api/profile/petinfo/getter`, {method: "get"})
         if(response.ok){
           const data = await response.json(); // Parse the JSON response
-          if(data.status === 'No Profile'){
+          if(data === ''){
             setIsEditing(true)
           }
           else{
